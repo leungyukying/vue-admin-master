@@ -1,45 +1,86 @@
 <template>
 	<div>
-		<el-form ref="form" :inline="true" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:90%;min-width:600px;">
-			<el-form-item label="HIS号">
-				<el-input v-model="form.hisNo"></el-input>
-			</el-form-item>
-			<el-form-item label="姓名">
-				<el-input v-model="form.name"></el-input>
-			</el-form-item>
-			<el-form-item label="性别">
-				<el-select v-model="form.sex" placeholder="请选择性别">
-					<el-option label="男" value="M"></el-option>
-					<el-option label="女" value="F"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="年龄">
-				<el-input v-model="form.age"></el-input>
-			</el-form-item>
-			<el-form-item label="联系电话">
-				<el-input v-model="form.phoneNum"></el-input>
-			</el-form-item>
-			<el-form-item label="门诊住院号">
-				<el-input v-model="form.outPatientNo"></el-input>
-			</el-form-item>
-			<el-form-item label="床号">
-				<el-input v-model="form.inPatientNo"></el-input>
-			</el-form-item>
-			<el-form-item label="病历号">
-				<el-input v-model="form.recordNum"></el-input>
-			</el-form-item>
-			<el-form-item label="身份证号">
-				<el-input v-model="form.cardNo"></el-input>
-			</el-form-item>
-			<el-form-item label="病人类型">
-				<el-select v-model="form.patientType" placeholder="请选择病人类型">
-					<el-option label="男" value="M"></el-option>
-					<el-option label="女" value="F"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="是否维护" prop="isRemain">
-				<el-switch on-text="" off-text="" v-model="form.isRemain"></el-switch>
-			</el-form-item>
+		<el-form ref="form" :inline="true" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:100%;min-width:600px;">
+			<el-row :gutter="10">
+				<el-col :span="12">
+					<el-form-item label="HIS号">
+					<el-input v-model="form.hisNo" autosize="true"></el-input>
+				</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="姓名">
+						<el-input v-model="form.name"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="性别">
+						<el-select v-model="form.sex" placeholder="请选择性别">
+							<el-option label="男" value="M"></el-option>
+							<el-option label="女" value="F"></el-option>
+						</el-select>
+					</el-form-item>	
+				</el-col>
+				<!-- <el-col :span="6">
+					<el-form-item label="年龄">
+						<el-input v-model="form.age"></el-input>
+					</el-form-item>
+				</el-col> -->
+			</el-row>
+			<el-row :gutter="10">
+				<el-col :span="6">
+					<el-form-item label="联系电话">
+						<el-input v-model="form.phoneNum"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="门诊住院号">
+						<el-input v-model="form.outPatientNo"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="床号">
+						<el-input v-model="form.inPatientNo"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="病历号">
+						<el-input v-model="form.recordNum"></el-input>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row :gutter="10">
+				<el-col :span="6">
+					<el-form-item label="身份证号">
+						<el-input v-model="form.cardNo"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="病人类型">
+						<el-select v-model="form.patientType" placeholder="请选择病人类型">
+							<el-option label="男" value="M"></el-option>
+							<el-option label="女" value="F"></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="是否维护" prop="isRemain">
+						<el-switch on-text="" off-text="" v-model="form.isRemain"></el-switch>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="6">
+					<el-form-item label="赔险设备">
+						<el-input v-model="form.equipment"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="18">
+					<el-form-item label="地址">
+						<el-input v-model="form.address"></el-input>
+					</el-form-item>
+				</el-col>
+			</el-row>
 			<el-form-item>
 				<el-button type="primary">手工预约</el-button>
 				<el-button @click.native.prevent>重置</el-button>
@@ -96,7 +137,9 @@
 					recordNum: '',
 					cardNo: '',
 					patientType: '',
-					isRemain: false
+					isRemain: false,
+					equipment: '',
+					address: ''
 				},
 				users: []
 			}
