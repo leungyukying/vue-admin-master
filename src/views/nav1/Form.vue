@@ -121,7 +121,7 @@
 			</el-table-column>
 			<el-table-column prop="appointmentDate" label="预约时间" width="120">
 			</el-table-column>
-			<el-table-column label="操作" width="120">
+			<el-table-column label="操作" width="140">
 				<template scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -173,7 +173,6 @@
 				this.$refs.form.resetFields();
 			},
 			search(){
-				debugger;
 				var patientParams = {
 					hisNo: this.form.hisNo,
 					hisType: this.form.hisType
