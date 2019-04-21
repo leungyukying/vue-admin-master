@@ -1,13 +1,18 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
-			</el-col>
-			<el-col :span="10">
-				<div class="tools" @click.prevent="collapse">
-					<i class="fa fa-align-justify"></i>
+			<el-col :span="6">
+				<div class="logo">
+					区域医技预约
 				</div>
+			</el-col>
+			<el-col :span="14">
+				<!--导航菜单-->
+				<el-menu :default-active="$route.path" router mode="horizontal" class="my-menu el-menu-demo" @open="handleopen" @close="handleclose" @select="handleselect">
+					<template v-for="(item, index) in $router.options.routes">
+						<el-menu-item :key="index" :index="item.path" v-if="!item.hidden">{{item.name}}</el-menu-item>
+					</template>
+				</el-menu>
 			</el-col>
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
@@ -21,36 +26,8 @@
 			</el-col>
 		</el-col>
 		<el-col :span="24" class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-if="!collapsed">
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
-					</template>
-				</el-menu>
-				<!--导航菜单-折叠后-->
-				<ul class="el-menu el-menu-vertical-demo collapsed" v-if="collapsed" ref="menuCollapsed">
-					<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
-						<template v-if="!item.leaf">
-							<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
-								<li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>
-							</ul>
-						</template>
-						<template v-else>
-							<li class="el-submenu">
-								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>
-							</li>
-						</template>
-					</li>
-				</ul>
-			</aside>
-			<section class="content-container">
+			<router-view></router-view>
+			<!-- <section class="content-container">
 				<div class="grid-content bg-purple-light">
 					<el-col :span="24" class="breadcrumb-container">
 						<strong class="title">{{$route.name}}</strong>
@@ -66,7 +43,7 @@
 						</transition>
 					</el-col>
 				</div>
-			</section>
+			</section> -->
 		</el-col>
 	</el-row>
 </template>
@@ -116,13 +93,6 @@
 				});
 
 
-			},
-			//折叠导航栏
-			collapse:function(){
-				this.collapsed=!this.collapsed;
-			},
-			showMenu(i,status){
-				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
 			}
 		},
 		mounted() {
@@ -147,8 +117,8 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 60px;
-			line-height: 60px;
+			height: 70px;
+			line-height: 70px;
 			background: $color-primary;
 			color:#fff;
 			.userinfo {
@@ -167,36 +137,32 @@
 					}
 				}
 			}
-			.logo {
-				//width:230px;
-				height:60px;
-				font-size: 22px;
-				padding-left:20px;
-				padding-right:20px;
-				border-color: rgba(238,241,146,0.3);
-				border-right-width: 1px;
-				border-right-style: solid;
-				img {
-					width: 40px;
-					float: left;
-					margin: 10px 10px 10px 18px;
+			.logo{
+				text-align: center;
+				font-size: 27px;
+				font-weight: bold;
+			}
+			.my-menu{
+				height: 70px;
+				line-height: 70px;
+				background: $color-primary;
+				line-height: bold;
+				.el-menu-item {
+					height: 70px;
+					line-height: 70px;
+					font-size: 16px;
+					background: $color-primary;
+					color:#48576a;
+					border-bottom: $color-primary;
 				}
-				.txt {
-					color:#fff;
+				.el-menu-item:hover {
+					color: #fff;
+					border-bottom: 5px solid #fff;;
 				}
-			}
-			.logo-width{
-				width:230px;
-			}
-			.logo-collapse-width{
-				width:60px
-			}
-			.tools{
-				padding: 0px 23px;
-				width:14px;
-				height: 60px;
-				line-height: 60px;
-				cursor: pointer;
+				.is-active{
+					color: #fff;
+					border-bottom: 5px solid #fff;;
+				}
 			}
 		}
 		.main {

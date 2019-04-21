@@ -78,7 +78,7 @@
 			</el-row>
 			<el-row :gutter="10">
 				<el-col :span="6">
-					<el-form-item label="赔险设备" prop="equipment">
+					<el-form-item label="陪检设备" prop="equipment">
 						<el-input v-model="form.equipment"></el-input>
 					</el-form-item>
 				</el-col>
