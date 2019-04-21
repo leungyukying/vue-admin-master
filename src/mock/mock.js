@@ -22,6 +22,7 @@ export default {
 
     //登录
     mock.onPost('/login').reply(config => {
+      debugger;
       let {username, password} = JSON.parse(config.data);
       return new Promise((resolve, reject) => {
         let user = null;
@@ -148,6 +149,11 @@ export default {
           }]);
         }, 500);
       });
+    });
+
+    mock.onGet('/patient/info').reply(config => {
+        let { hisNo, hisType } = config.params;
+        console.log(hisNo);
     });
 
   }

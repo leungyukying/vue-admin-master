@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-let base = 'https://www.easy-mock.com/mock/5cbb1b5077d87e22c39d911f/graduate';
+//let base = 'https://www.easy-mock.com/mock/5cbb1b5077d87e22c39d911f/graduate';
+let base = '';
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
@@ -16,4 +17,4 @@ export const editUser = params => { return axios.get(`${base}/user/edit`, { para
 
 export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
 
-export const selectPatientInfo = params => { return axios.get(`${base}/patient/info`, { params: params }); };
+export const selectPatientInfo = params => { return axios.get(`${base}/patient/info`, { params: params }).then(res => res.data); };
