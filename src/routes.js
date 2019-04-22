@@ -25,14 +25,22 @@ let routes = [
     },
     //{ path: '/main', component: Main },
     {
-        path: '/form',
-        component: Form,
-        name: '信息登记'
+        path: '/',
+        component: Home,
+        redirect: '/form',
+        name: '信息登记',
+        children: [
+            { path: '/form', component: Form, name: '信息登记' }
+        ]
+
     },
     {
         path: '/appointmentSearch',
-        component: AppointmentSearch,
-        name: '预约查询'
+        component: Home,
+        name: '预约查询',
+        children: [
+            { path: '/appointmentSearch', component: AppointmentSearch, name: '预约查询' }
+        ]
     },
     {
         path: '/',
