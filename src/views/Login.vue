@@ -93,27 +93,10 @@ export default {
             username: this.ruleForm2.account,
             password: this.ruleForm2.checkPass
           };
-          console.log(this.reqapi);
-          const res = await this.$http.post(this.api.login, loginParams)
-          let { msg, code, user } = data;
+          const res = await this.$http.post('/login', loginParams);
+          let { msg, code, user } = res.data;
           sessionStorage.setItem("user", JSON.stringify(user));
-          this.$router.push({ path: "/table" });
-
-
-          // requestLogin(loginParams).then(data => {
-          //   this.logining = false;
-          //   //NProgress.done();
-          //   let { msg, code, user } = data;
-          //   if (code !== 200) {
-          //     this.$message({
-          //       message: msg,
-          //       type: "error"
-          //     });
-          //   } else {
-          //     sessionStorage.setItem("user", JSON.stringify(user));
-          //     this.$router.push({ path: "/table" });
-          //   }
-          // });
+          this.$router.push({ path: "/" });
         } else {
           console.log("error submit!!");
           return false;
