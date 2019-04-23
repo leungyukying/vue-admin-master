@@ -10,9 +10,16 @@ import Vuex from 'vuex'
 //import NProgress from 'nprogress'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
-import Mock from './mock'
-Mock.bootstrap();
+//import Mock from './mock'
+//Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
+
+import http from './api/http'
+Vue.prototype.$http = http
+
+import reqapi from './api/api'
+Vue.prototype.reqapi = reqapi
+
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)

@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { requestLogin } from "../api/api";
 //import NProgress from 'nprogress'
 export default {
   data() {
@@ -85,7 +84,7 @@ export default {
     },
     handleSubmit2(ev) {
       var _this = this;
-      this.$refs.ruleForm2.validate(valid => {
+      this.$refs.ruleForm2.validate(async (valid) => {
         if (valid) {
           //_this.$router.replace('/table');
           this.logining = true;
@@ -94,20 +93,27 @@ export default {
             username: this.ruleForm2.account,
             password: this.ruleForm2.checkPass
           };
-          requestLogin(loginParams).then(data => {
-            this.logining = false;
-            //NProgress.done();
-            let { msg, code, user } = data;
-            if (code !== 200) {
-              this.$message({
-                message: msg,
-                type: "error"
-              });
-            } else {
-              sessionStorage.setItem("user", JSON.stringify(user));
-              this.$router.push({ path: "/table" });
-            }
-          });
+          console.log(this.reqapi);
+          const res = await this.$http.post(this.api.login, loginParams)
+          let { msg, code, user } = data;
+          sessionStorage.setItem("user", JSON.stringify(user));
+          this.$router.push({ path: "/table" });
+
+
+          // requestLogin(loginParams).then(data => {
+          //   this.logining = false;
+          //   //NProgress.done();
+          //   let { msg, code, user } = data;
+          //   if (code !== 200) {
+          //     this.$message({
+          //       message: msg,
+          //       type: "error"
+          //     });
+          //   } else {
+          //     sessionStorage.setItem("user", JSON.stringify(user));
+          //     this.$router.push({ path: "/table" });
+          //   }
+          // });
         } else {
           console.log("error submit!!");
           return false;
