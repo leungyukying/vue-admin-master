@@ -174,7 +174,8 @@
 				</el-row>
 				<el-row>
 					<el-col :span="9">
-						<datepicker :inline="true" :language="zh" v-model="appointmentForm.date"></datepicker>
+						<datepicker :inline="true" :language="zh" v-model="appointmentForm.date"
+						:highlighted="highlighted"></datepicker>
 					</el-col>
 					<el-col :span="15">
 						<el-card class="box-card" shadow="never">
@@ -302,12 +303,22 @@
   }
 
   .successMsg {
-	font-size: 25px;
+		font-size: 25px;
     text-align: center;
     display: block;
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+	.vdp-datepicker__calendar .cell.selected {
+		background: #fff !important;
+		border: 1px solid blue;
+	}
+
+	.vdp-datepicker__calendar .cell.highlighted{
+		background: #fff !important;
+		border: 1px solid green;
+	}
 </style>
 
 <script>
@@ -339,17 +350,13 @@
 					equipment: '',
 					address: ''
 				},
-				users: [{
-					applyNo: "123",
-					hisProjectName: "测试",
-					checkItem: "头部"
-				}],
+				users: [],
 				dialogFormVisible: false,
 				successDialogVisible: false,
 				appointmentForm: {
 					hospital: '',
 					checkType: '',
-					date: ''
+					date: new Date()
 				},
 				appointmentRules: {
 					hospital: [
@@ -358,6 +365,24 @@
 					checkType: [
 						{ required: true, message: '请选择检查类型', trigger: 'change' }
 					]
+				},
+				highlighted: {
+          customPredictor: function (date) {
+            // highlights every day of a month which is a multiple of 4
+            if (date.getDate() % 4 === 0) {
+              return true
+            }
+          }
+        },
+				state: {
+					highlighted:{
+						dates: [
+							new Date(2019, 4, 1),
+							new Date(2019, 4, 2),
+							new Date(2019, 4, 3)
+						],
+						includeDisabled: true
+					}
 				}
 			}
 		},
