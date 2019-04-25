@@ -142,14 +142,14 @@
 				<el-row :gutter="10" style="margin-bottom: 5px; margin-top 5px;">
 					<el-col :span="12">
 						<el-form-item label="检查医院" prop="hospital">
-							<el-select v-model="appointmentForm.hospital" placeholder="请选择医院">
+							<el-select v-model="appointmentForm.hospital" placeholder="请选择医院" @change="selectAppointmentDate">
 								<el-option label="江阴市中医院" value="1"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="检查类型" prop="checkType">
-							<el-select v-model="appointmentForm.checkType" placeholder="请选择检查类型">
+							<el-select v-model="appointmentForm.checkType" placeholder="请选择检查类型" @change="selectAppointmentDate">
 								<el-option label="CT" value="1"></el-option>
 								<el-option label="MR" value="2"></el-option>
 							</el-select>
@@ -174,7 +174,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="9">
-						<datepicker :inline="true" :language="zh" v-model="appointmentForm.date"
+						<datepicker :inline="true" :language='zh' v-model="appointmentForm.date"
 						:highlighted="highlighted"></datepicker>
 					</el-col>
 					<el-col :span="15">
@@ -310,7 +310,7 @@
     margin-bottom: 20px;
   }
 
-	.vdp-datepicker__calendar .cell.selected {
+	/* .vdp-datepicker__calendar .cell.selected {
 		background: #fff !important;
 		border: 1px solid blue;
 	}
@@ -318,7 +318,7 @@
 	.vdp-datepicker__calendar .cell.highlighted{
 		background: #fff !important;
 		border: 1px solid green;
-	}
+	} */
 </style>
 
 <script>
@@ -356,6 +356,8 @@
 				appointmentForm: {
 					hospital: '',
 					checkType: '',
+					checkItem: '',
+					scanType: '',
 					date: new Date()
 				},
 				appointmentRules: {
@@ -366,23 +368,33 @@
 						{ required: true, message: '请选择检查类型', trigger: 'change' }
 					]
 				},
+				highlightDate:[],
 				highlighted: {
-          customPredictor: function (date) {
-            // highlights every day of a month which is a multiple of 4
-            if (date.getDate() % 4 === 0) {
-              return true
-            }
-          }
-        },
-				state: {
-					highlighted:{
-						dates: [
-							new Date(2019, 4, 1),
-							new Date(2019, 4, 2),
-							new Date(2019, 4, 3)
-						],
-						includeDisabled: true
-					}
+					customPredictor: function (date) {
+						debugger;
+						if(this.highlightDate != undefined && this.highlightDate.length > 0){
+							let year = date.getYear();
+							let month = date.getMonth();
+							let date = date.getDate();
+
+							let monthstr = month + '';
+							if (month < 10){
+								monthstr = '0' + month;
+							}
+
+							let datestr = date + '';
+							if (date < 10){
+								datestr = '0' + date;
+							}
+							let temp = year + '-' + monthstr + '-' + datestr;
+							
+							for(let i = 0; i < this.highlightDate.length; i++){
+								if (temp == this.highlightDate[i]){
+									return true;
+								}
+							}
+						}
+          			}
 				}
 			}
 		},
@@ -404,6 +416,21 @@
 					this.users = data.users;
 					this.form = data;
 				});
+			},
+			selectAppointmentDate() {
+			    if(this.appointmentForm.hospital != '' && this.appointmentForm.checkType != ''){
+					var appointmentParams = {
+						hospital: this.appointmentForm.hospital,
+						checkType: this.appointmentForm.checkType
+					}
+					const res = this.$http.post('/appointment/date', appointmentParams).then(res => {
+						let { code, data } = res.data;
+
+						data.forEach((item, index)=>{
+							this.highlightDate.push(item.date);
+						});
+					});
+				}
 			},
 			appointment(index, row){
 				
