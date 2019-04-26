@@ -175,7 +175,7 @@
 				<el-row>
 					<el-col :span="9">
 						<datepicker :inline="true" :language='zh' v-model="appointmentForm.date"
-						:highlighted="highlighted"></datepicker>
+						:highlighted="highlighted" calendar-class="calendar-class"></datepicker>
 					</el-col>
 					<el-col :span="15">
 						<el-card class="box-card" shadow="never">
@@ -183,7 +183,19 @@
 								<span>2019-04-21</span>
 								<span style="float: right;">0/10=已预约号源/总号源</span>
 							</div>
-							<el-row :gutter="5">
+							<div class="list">
+								<div v-for="(item, index) in [1,2,3,4,5,6,7]" :key="index">
+									<el-card shadow="never" class="item">
+											<div>08:00-08:30</div>
+											<div style="margin-top:8px">
+												0/4
+												<el-checkbox style="float: right;"></el-checkbox>
+											</div>
+									</el-card>
+								</div>
+								
+							</div>
+							<!-- <el-row :gutter="5">
 								<el-col :span="6">
 									<el-card shadow="never">
 										<div>08:00-08:30</div>
@@ -258,7 +270,7 @@
 										</div>
 									</el-card>
 								</el-col>
-							</el-row>
+							</el-row> -->
 						</el-card>
 					</el-col>
 				</el-row>
@@ -283,7 +295,7 @@
 	</div>
 </template>
 
-<style>
+<style lang="less">
   .el-input .el-select .el-input {
     width: 90px;
   }
@@ -319,6 +331,16 @@
 		background: #fff !important;
 		border: 1px solid green;
 	}
+
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		.item {
+			margin-left: 10px;
+			margin-top: 10px;
+		} 	
+	}
+
 </style>
 
 <script>
