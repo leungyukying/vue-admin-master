@@ -310,7 +310,7 @@
     margin-bottom: 20px;
   }
 
-	/* .vdp-datepicker__calendar .cell.selected {
+	.vdp-datepicker__calendar .cell.selected {
 		background: #fff !important;
 		border: 1px solid blue;
 	}
@@ -318,7 +318,7 @@
 	.vdp-datepicker__calendar .cell.highlighted{
 		background: #fff !important;
 		border: 1px solid green;
-	} */
+	}
 </style>
 
 <script>
@@ -368,33 +368,8 @@
 						{ required: true, message: '请选择检查类型', trigger: 'change' }
 					]
 				},
-				highlightDate:[],
 				highlighted: {
-					customPredictor: function (date) {
-						debugger;
-						if(this.highlightDate != undefined && this.highlightDate.length > 0){
-							let year = date.getYear();
-							let month = date.getMonth();
-							let date = date.getDate();
-
-							let monthstr = month + '';
-							if (month < 10){
-								monthstr = '0' + month;
-							}
-
-							let datestr = date + '';
-							if (date < 10){
-								datestr = '0' + date;
-							}
-							let temp = year + '-' + monthstr + '-' + datestr;
-							
-							for(let i = 0; i < this.highlightDate.length; i++){
-								if (temp == this.highlightDate[i]){
-									return true;
-								}
-							}
-						}
-          			}
+					dates: []
 				}
 			}
 		},
@@ -417,25 +392,40 @@
 					this.form = data;
 				});
 			},
-			selectAppointmentDate() {
+			async selectAppointmentDate() {
 			    if(this.appointmentForm.hospital != '' && this.appointmentForm.checkType != ''){
 					var appointmentParams = {
 						hospital: this.appointmentForm.hospital,
 						checkType: this.appointmentForm.checkType
 					}
-					const res = this.$http.post('/appointment/date', appointmentParams).then(res => {
-						let { code, data } = res.data;
-
-						data.forEach((item, index)=>{
-							this.highlightDate.push(item.date);
-						});
+					const res = await this.$http.post('/appointment/date', appointmentParams);
+					let { code, data } = res.data;
+					data.forEach((item, index)=>{
+							this.highlighted.dates.push(this.stringTimeToDate(item.date));
 					});
 				}
 			},
 			appointment(index, row){
 				
-			}
+			},
+			stringTimeToDate(timeStr){
+        var resDate;
+        if(timeStr.indexOf("-")!=-1){
+          var nyrArr=timeStr.split(' ')[0].split('-');
+          resDate=new Date(nyrArr[0],nyrArr[1]-1,nyrArr[2]);
+        }
+        if(timeStr.indexOf(".")!=-1){
+          var nyrArr=timeStr.split(' ')[0].split('.');
+          var sfmArr=timeStr.split(' ')[1].split(':');
+          resDate=new Date(nyrArr[0],nyrArr[1]-1,nyrArr[2],sfmArr[0],sfmArr[1],0,0);
+        }
+        if(timeStr.indexOf("/")!=-1){
+          var nyrArr=timeStr.split(' ')[0].split('/');
+          var sfmArr=timeStr.split(' ')[1].split(':');
+          resDate=new Date(nyrArr[0],nyrArr[1]-1,nyrArr[2],sfmArr[0],sfmArr[1],0,0);
+        }
+        return resDate;
+      }
 		}
 	}
-
 </script>
