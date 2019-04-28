@@ -1,57 +1,65 @@
-import Login from './views/Login.vue'
-import NotFound from './views/404.vue'
-import Home from './views/Home.vue'
-import Main from './views/Main.vue'
-import Table from './views/nav1/Table.vue'
-import Form from './views/nav1/Form.vue'
-import AppointmentSearch from './views/nav1/appointment-search.vue'
-import Page4 from './views/nav2/Page4.vue'
-import Page5 from './views/nav2/Page5.vue'
-import Page6 from './views/nav3/Page6.vue'
-import echarts from './views/charts/echarts.vue'
+import Login from "./views/Login.vue";
+import NotFound from "./views/404.vue";
+import Home from "./views/Home.vue";
+import Main from "./views/Main.vue";
+import Table from "./views/nav1/Table.vue";
+import Form from "./views/nav1/Form.vue";
+import AppointmentSearch from "./views/nav1/appointment-search.vue";
+import Page4 from "./views/nav2/Page4.vue";
+import Page5 from "./views/nav2/Page5.vue";
+import Page6 from "./views/nav3/Page6.vue";
+import echarts from "./views/charts/echarts.vue";
+import 预约统计 from "./modules/预约统计/预约统计";
 
 let routes = [
-    {
-        path: '/login',
-        component: Login,
-        name: '',
-        hidden: true
-    },
-    {
-        path: '/404',
-        component: NotFound,
-        name: '',
-        hidden: true
-    },
-    //{ path: '/main', component: Main },
-    {
-        path: '/',
-        component: Home,
-        redirect: '/form',
-        name: '信息登记',
-        children: [
-            { path: '/form', component: Form, name: '信息登记' }
-        ]
-
-    },
-    {
-        path: '/appointmentSearch',
-        component: Home,
-        name: '预约查询',
-        children: [
-            { path: '/appointmentSearch', component: AppointmentSearch, name: '预约查询' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        hidden: true
-    },
-    {
-        path: '*',
-        hidden: true,
-        redirect: { path: '/404' }
-    }
+  {
+    path: "/login",
+    component: Login,
+    name: "",
+    hidden: true
+  },
+  {
+    path: "/404",
+    component: NotFound,
+    name: "",
+    hidden: true
+  },
+  //{ path: '/main', component: Main },
+  {
+    path: "/",
+    component: Home,
+    redirect: "/form",
+    name: "信息登记",
+    children: [{ path: "/form", component: Form, name: "信息登记" }]
+  },
+  {
+    path: "/appointmentSearch",
+    component: Home,
+    name: "预约查询",
+    children: [
+      {
+        path: "/appointmentSearch",
+        component: AppointmentSearch,
+        name: "预约查询"
+      }
+    ]
+  },
+  {
+    path: "/yytj",
+    component: Home,
+    name: "预约统计",
+    children: [{ path: "/yytj", component: 预约统计, name: "预约查询" }]
+  },
+  {
+    path: "/",
+    component: Home,
+    hidden: true
+  },
+  {
+    path: "*",
+    hidden: true,
+    redirect: { path: "/404" }
+  }
 ];
 
 export default routes;
