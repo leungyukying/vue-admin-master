@@ -84,7 +84,7 @@ export default {
     },
     handleSubmit2(ev) {
       var _this = this;
-      this.$refs.ruleForm2.validate(async (valid) => {
+      this.$refs.ruleForm2.validate(async valid => {
         if (valid) {
           //_this.$router.replace('/table');
           this.logining = true;
@@ -93,10 +93,10 @@ export default {
             username: this.ruleForm2.account,
             password: this.ruleForm2.checkPass
           };
-          const res = await this.$http.post('/login', loginParams);
-          let { msg, code, user } = res.data;
-          sessionStorage.setItem("user", JSON.stringify(user));
-          this.$router.push({ path: "/" });
+          // const res = await this.$http.post("/login", loginParams);
+          // let { msg, code, user } = res.data;
+          // sessionStorage.setItem("user", JSON.stringify(user));
+          this.$router.push({ path: "/form" });
         } else {
           console.log("error submit!!");
           return false;

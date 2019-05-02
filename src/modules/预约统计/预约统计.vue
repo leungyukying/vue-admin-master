@@ -82,14 +82,14 @@ export default {
 <style lang='scss' scoped>
 .left-part-con {
   position: fixed;
-  top: 70px;
+  top: 60px;
   left: 0;
   bottom: 0;
   width: 200px;
 }
 .main-con {
   margin-left: 200px;
-  padding: 20px 10px;
+  padding: 10px 10px;
 }
 .search-con {
   padding: 15px;

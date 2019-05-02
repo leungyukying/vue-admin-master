@@ -10,8 +10,14 @@ import Page5 from "./views/nav2/Page5.vue";
 import Page6 from "./views/nav3/Page6.vue";
 import echarts from "./views/charts/echarts.vue";
 import 预约统计 from "./modules/预约统计/预约统计";
+import 黑名单 from "./modules/黑名单/黑名单";
 
 let routes = [
+  {
+    path: "/",
+    redirect: "/login",
+    hidden: true
+  },
   {
     path: "/login",
     component: Login,
@@ -26,7 +32,7 @@ let routes = [
   },
   //{ path: '/main', component: Main },
   {
-    path: "/",
+    path: "/form",
     component: Home,
     redirect: "/form",
     name: "信息登记",
@@ -49,6 +55,12 @@ let routes = [
     component: Home,
     name: "预约统计",
     children: [{ path: "/yytj", component: 预约统计, name: "预约查询" }]
+  },
+  {
+    path: "/hmd",
+    component: Home,
+    name: "黑名单",
+    children: [{ path: "/hmd", component: 黑名单, name: "hmd" }]
   },
   {
     path: "/",
