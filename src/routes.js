@@ -9,6 +9,7 @@ import DeptAdmin from './views/admin/base/dept-admin.vue'
 import LeftNav from './components/nav/LeftNav.vue'
 import BodyAdmin from './views/admin/base/body-admin.vue'
 import echarts from './views/charts/echarts.vue'
+import DictionaryAdmin from './views/admin/base/dictionary-admin.vue'
 
 let routes = [
     {
@@ -54,7 +55,8 @@ let routes = [
                 component: LeftNav, 
                 children: [
                     { path: '/admin/adminList/deptAdmin', component: DeptAdmin },
-                    { path: '/admin/adminList/bodyAdmin', component: BodyAdmin }
+                    { path: '/admin/adminList/bodyAdmin', component: BodyAdmin },
+                    { path: '/admin/adminList/dictionaryAdmin', component: DictionaryAdmin }
                   ]
             }
         ]

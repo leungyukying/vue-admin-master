@@ -2,7 +2,7 @@
   <el-col :span="24" class="main" style="top:0px">
     <!--左侧导航-->
      <el-menu
-      class="el-menu-vertical-demo" style="width: 11%"
+      class="el-menu-vertical-demo" style="width: 14%"
       default-active="/admin/adminList/deptAdmin"
       @open="handleOpen"
       @close="handleClose"
@@ -15,6 +15,7 @@
         <el-menu-item-group>
           <el-menu-item index="/admin/adminList/deptAdmin">医疗机构管理</el-menu-item>
           <el-menu-item index="/admin/adminList/bodyAdmin">检查部位管理</el-menu-item>
+          <el-menu-item index="/admin/adminList/dictionaryAdmin">常用字典管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
