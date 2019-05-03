@@ -1,4 +1,3 @@
-'use strict'
 //import { showAlert, showFullScreenLoading, tryHideFullScreenLoading } from './loading';
 import axios from 'axios';
 import qs from 'qs';
