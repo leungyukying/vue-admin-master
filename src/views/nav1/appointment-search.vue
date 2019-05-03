@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 100%">
 		<el-form ref="searchForm" label-position="right" label-width="70px" :model="searchForm"
 		 @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
 			<el-row :gutter="10">

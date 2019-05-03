@@ -8,10 +8,13 @@
 			</el-col>
 			<el-col :span="14">
 				<!--导航菜单-->
-				<el-menu :default-active="$route.path" router mode="horizontal" class="my-menu el-menu-demo" @open="handleopen" @close="handleclose" @select="handleselect">
-					<template v-for="(item, index) in $router.options.routes">
+				<el-menu :default-active="$route.path" :router="true" mode="horizontal" class="my-menu el-menu-demo" @open="handleopen" @close="handleclose" @select="handleselect">
+					<!-- <template v-for="(item, index) in $router.options.routes">
 						<el-menu-item :key="index" :index="item.path" v-if="!item.hidden">{{item.name}}</el-menu-item>
-					</template>
+					</template> -->
+					<el-menu-item index="/form">信息登记</el-menu-item>
+					<el-menu-item index="/appointmentSearch">预约查询</el-menu-item>
+					<el-menu-item index="/admin">后台管理</el-menu-item>
 				</el-menu>
 			</el-col>
 			<el-col :span="4" class="userinfo">
@@ -169,7 +172,7 @@
 			display: flex;
 			// background: #324057;
 			position: absolute;
-			top: 60px;
+			top: 71px;
 			bottom: 0px;
 			overflow: hidden;
 			aside {

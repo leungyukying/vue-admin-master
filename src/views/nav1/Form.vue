@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 100%">
 		<el-collapse v-model="activeNames">
 			<el-collapse-item title="基本信息" name="1">
 				<el-form ref="form" label-position="right" label-width="70px" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
