@@ -82,7 +82,7 @@ export default {
 <style lang='scss' scoped>
 .left-part-con {
   position: fixed;
-  top: 60px;
+  top: 70px;
   left: 0;
   bottom: 0;
   width: 200px;

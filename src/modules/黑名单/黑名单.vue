@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <div class="search-con shadow">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="His号">
