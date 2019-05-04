@@ -82,26 +82,35 @@ export default {
     handleReset2() {
       this.$refs.ruleForm2.resetFields();
     },
-    handleSubmit2(ev) {
+    async handleSubmit2(ev) {
       var _this = this;
-      this.$refs.ruleForm2.validate(async valid => {
-        if (valid) {
-          //_this.$router.replace('/table');
-          this.logining = true;
-          //NProgress.start();
-          var loginParams = {
-            username: this.ruleForm2.account,
-            password: this.ruleForm2.checkPass
-          };
-          // const res = await this.$http.post("/login", loginParams);
-          // let { msg, code, user } = res.data;
-          // sessionStorage.setItem("user", JSON.stringify(user));
-          this.$router.push({ path: "/form" });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+      var loginParams = {
+        msgHeader : '{"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"sender": "发送方（即发送请求的医院）","serviceName":"login","operatorId":"操作者ID（即发送请求的医生id）","operator": "操作者（即发送请求的医生的姓名）","callOrg": "调用机构编码","targetOrg": "目标机构编码","event":"事件"}}',
+        msgBody : '{"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"loginAccount":"9999","passWord":"1","loginTime":"2019-5-2","orgName":"A医院"}}'
+      }
+      const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
+      console.info(res.data);
+      
+      // this.$refs.ruleForm2.validate(async valid => {
+      //   if (valid) {
+      //     debugger;
+      //     //_this.$router.replace('/table');
+      //     this.logining = true;
+      //     //NProgress.start();
+      //     // var loginParams = {
+      //     //   username: this.ruleForm2.account,
+      //     //   password: this.ruleForm2.checkPass
+      //     // };
+      //     var loginParams = 'msgHeader={"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"sender": "发送方（即发送请求的医院）","serviceName":"login","operatorId":"操作者ID（即发送请求的医生id）","operator": "操作者（即发送请求的医生的姓名）","callOrg": "调用机构编码","targetOrg": "目标机构编码","event":"事件"}}&msgBody={"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"loginAccount":"9999","passWord":"1","loginTime":"2019-5-2","orgName":"A医院"}}';
+      //     const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
+      //     // let { msg, code, user } = res.data;
+      //     // sessionStorage.setItem("user", JSON.stringify(user));
+      //     //this.$router.push({ path: "/form" });
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
     }
   }
 };

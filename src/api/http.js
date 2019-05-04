@@ -97,6 +97,7 @@ server.interceptors.response.use((res) => {
 
 export default {
   post(url, data, headers = null) {
+    console.info(data);
     return server({
       method: 'post',
       url,
