@@ -10,6 +10,9 @@ import LeftNav from './components/nav/LeftNav.vue'
 import BodyAdmin from './views/admin/base/body-admin.vue'
 import echarts from './views/charts/echarts.vue'
 import DictionaryAdmin from './views/admin/base/dictionary-admin.vue'
+import 预约统计 from "./modules/预约统计/预约统计";
+import 黑名单 from "./modules/黑名单/黑名单";
+
 
 let routes = [
     {
@@ -34,6 +37,26 @@ let routes = [
             { path: '/form', component: Form, name: '信息登记' }
         ]
 
+    },
+    {
+        path: "/hmd",
+        component: Home,
+        name: "黑名单",
+        children: [{ path: "/hmd", component: 黑名单, name: "hmd" }]
+    },
+    {
+        path: "/yytj",
+        component: Home,
+        name: "预约统计",
+        children: [{ path: "/yytj", component: 预约统计, name: "预约查询" }]
+    },    
+    {
+        path: '/appointmentSearch',
+        component: Home,
+        name: '预约查询',
+        children: [
+            { path: '/appointmentSearch', component: AppointmentSearch, name: '预约查询' }
+        ]
     },
     {
         path: '/appointmentSearch',

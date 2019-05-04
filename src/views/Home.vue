@@ -14,6 +14,8 @@
 					</template> -->
 					<el-menu-item index="/form">信息登记</el-menu-item>
 					<el-menu-item index="/appointmentSearch">预约查询</el-menu-item>
+					<el-menu-item index="/yytj">预约统计</el-menu-item>
+					<el-menu-item index="/hmd">黑名单</el-menu-item>
 					<el-menu-item index="/admin">后台管理</el-menu-item>
 				</el-menu>
 			</el-col>

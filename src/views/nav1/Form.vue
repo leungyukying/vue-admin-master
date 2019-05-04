@@ -101,36 +101,40 @@
 		</el-collapse>
 
 		<el-table :data="users" border style="width: 100%;">
-			<el-table-column type="selection" width="55">
+			<el-table-column type="selection" min-width="55">
 			</el-table-column>
-			<el-table-column prop="applyNo" label="申请单号" width="120">
+			<el-table-column prop="applyNo" label="申请单号" min-width="120">
 			</el-table-column>
-			<el-table-column prop="hisProjectName" label="HIS项目" width="100">
+			<el-table-column prop="hisProjectName" label="HIS项目" min-width="100">
 			</el-table-column>
-			<el-table-column prop="checkItem" label="检查项目" width="100">
+			<el-table-column prop="checkItem" label="检查项目" min-width="100">
 			</el-table-column>
-			<el-table-column prop="checkType" label="检查类型" width="120">
+			<el-table-column prop="checkType" label="检查类型" min-width="120">
 			</el-table-column>
-			<el-table-column prop="doctorName" label="申请医生" width="120">
+			<el-table-column prop="doctorName" label="申请医生" min-width="120">
 			</el-table-column>
-			<el-table-column prop="applyDate" label="申请时间" width="120">
+			<el-table-column prop="applyDate" label="申请时间" min-width="120">
 			</el-table-column>
-			<el-table-column prop="appointmentyStatus" label="预约状态" width="120">
+			<el-table-column prop="appointmentyStatus" label="预约状态" min-width="120"
+			:filter-method="appointmentyStatusTag"
+			:filters="[{ text: '已预约', value: '已预约' }, { text: '未预约', value: '未预约' }]">
 			</el-table-column>
-			<el-table-column prop="free" label="费用" width="120">
+			<el-table-column prop="free" label="费用" min-width="120">
 			</el-table-column>
-			<el-table-column prop="freeStatus" label="收费状态" width="120">
+			<el-table-column prop="freeStatus" label="收费状态" min-width="120">
 			</el-table-column>
-			<el-table-column prop="hospitalName" label="检查医院" width="120">
+			<el-table-column prop="hospitalName" label="检查医院" min-width="120">
 			</el-table-column>
-			<el-table-column prop="appointmentDate" label="预约时间" width="120">
+			<el-table-column prop="appointmentDate" label="预约时间" min-width="120">
 			</el-table-column>
-			<el-table-column label="操作" width="140">
-				<!-- <template scope="scope">
-					<el-button type="text" class="el-icon-date" @click="appointment(scope.$index, scope.row)"> 预约</el-button>	
-				</template> -->
-				<template>
-					<el-button type="text" class="el-icon-date" @click="dialogFormVisible = true"> 预约</el-button>	
+			<el-table-column label="操作" min-width="200" fixed="right">
+				<template slot-scope="scope">
+					<el-button type="text" v-if="scope.row.appointmentyStatus == '已预约'" 
+					class="el-icon-edit" @click="dialogFormVisible = true"> 修改</el-button>
+					<el-button type="text" v-if="scope.row.appointmentyStatus == '已预约'" 
+					class="el-icon-delete" @click="dialogFormVisible = true"> 取消</el-button>	
+					<el-button type="text" v-if="scope.row.appointmentyStatus == '未预约'" 
+					class="el-icon-date" @click="dialogFormVisible = true"> 预约</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -429,6 +433,9 @@
 			},
 			appointment(index, row){
 				
+			},
+			appointmentyStatusTag(value, row){
+				row.appointmentyStatus = value;
 			},
 			stringTimeToDate(timeStr){
         var resDate;
