@@ -27,7 +27,7 @@
       <span class="input-type">密码</span>
       <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+    <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
     <el-form-item style="width:100%;">
       <el-button
         type="primary"
@@ -84,12 +84,31 @@ export default {
     },
     async handleSubmit2(ev) {
       var _this = this;
+      var msgBody = {
+        // '?xml': {
+        //   '@version':'1.0',
+        //   '@encoding':'utf-8'
+        // },
+        root: {
+          loginAccount: this.ruleForm2.account,
+          passWord: this.ruleForm2.checkPass,
+          orgName: 'A医院'
+        }
+        // root: {
+        //   loginAccount: '9999',
+        //   passWord: '1',
+        //   orgName: 'A医院'
+        // }
+      };
       var loginParams = {
-        msgHeader : '{"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"sender": "发送方（即发送请求的医院）","serviceName":"login","operatorId":"操作者ID（即发送请求的医生id）","operator": "操作者（即发送请求的医生的姓名）","callOrg": "调用机构编码","targetOrg": "目标机构编码","event":"事件"}}',
-        msgBody : '{"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"loginAccount":"9999","passWord":"1","loginTime":"2019-5-2","orgName":"A医院"}}'
+        msgHeader : '{"root":{"serviceName":"login"}',
+        msgBody : JSON.stringify(msgBody)
       }
       const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
-      console.info(res.data);
+      if(res.data.root.loginStatus == '登录成功'){
+        this.$router.push({ path: "/form" });
+      }
+      //this.$router.push({ path: "/form" });
       
       // this.$refs.ruleForm2.validate(async valid => {
       //   if (valid) {

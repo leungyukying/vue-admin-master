@@ -5,70 +5,72 @@
 				<el-form ref="form" label-position="right" label-width="70px" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
 					<el-row :gutter="10">
 						<el-col :span="12">
-							<el-form-item label="HIS号" prop="hisNo">
-								<el-input v-model="form.hisNo">
-									<el-select v-model="form.hisType" slot="prepend">
+							<el-form-item label="HIS号" prop="HisCode">
+								<el-input v-model="form.HisCode">
+									<el-select v-model="form.PatientType" slot="prepend">
 										<el-option label="门诊" value="1"></el-option>
 										<el-option label="住院" value="2"></el-option>
+										<el-option label="体检病人" value="3"></el-option>
 									</el-select>
 									<el-button class="el-icon-search" slot="append" @click="search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="姓名" label-width="90px" prop="name">
-								<el-input v-model="form.name"></el-input>
+							<el-form-item label="姓名" label-width="90px" prop="PatientName">
+								<el-input v-model="form.PatientName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="性别" prop="sex">
-								<el-select v-model="form.sex" placeholder="请选择性别">
-									<el-option label="男" value="M"></el-option>
-									<el-option label="女" value="F"></el-option>
+							<el-form-item label="性别" prop="Sex">
+								<el-select v-model="form.Sex" placeholder="请选择性别">
+									<el-option label="男" value="男"></el-option>
+									<el-option label="女" value="女"></el-option>
 								</el-select>
 							</el-form-item>	
 						</el-col>
 					</el-row>
 					<el-row :gutter="10">
 						<el-col :span="6">
-							<el-form-item label="年龄" prop="age">
-								<el-input v-model="form.age">
+							<el-form-item label="年龄" prop="Age">
+								<el-input v-model="form.Age">
 									<template slot="append">岁</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="联系电话" prop="phoneNum">
-								<el-input v-model="form.phoneNum"></el-input>
+							<el-form-item label="联系电话" prop="PhoneNumber">
+								<el-input v-model="form.PhoneNumber"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="门诊/住院号" label-width="90px" prop="outPatientNo">
-								<el-input v-model="form.outPatientNo"></el-input>
+							<el-form-item label="门诊/住院号" label-width="90px" prop="PatientID">
+								<el-input v-model="form.PatientID"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="床号" prop="inPatientNo">
-								<el-input v-model="form.inPatientNo"></el-input>
+							<el-form-item label="床号" prop="BedNo">
+								<el-input v-model="form.BedNo"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="10">
 						<el-col :span="6">
-							<el-form-item label="病历号" prop="recordNum">
-								<el-input v-model="form.recordNum"></el-input>
+							<el-form-item label="病历号" prop="PatientRecordNo">
+								<el-input v-model="form.PatientRecordNo"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="身份证号" prop="cardNo">
-								<el-input v-model="form.cardNo"></el-input>
+							<el-form-item label="身份证号" prop="ChinaIdCard">
+								<el-input v-model="form.ChinaIdCard"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="病人类型" label-width="90px" prop="patientType">
-								<el-select v-model="form.patientType" placeholder="请选择病人类型">
-									<el-option label="男" value="M"></el-option>
-									<el-option label="女" value="F"></el-option>
+							<el-form-item label="病人类型" label-width="90px" prop="PatientType">
+								<el-select v-model="form.PatientType" placeholder="请选择病人类型">
+									<el-option label="门诊" value="1"></el-option>
+									<el-option label="住院" value="2"></el-option>
+									<el-option label="体检病人" value="3"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -85,8 +87,8 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="18">
-							<el-form-item label="地址" prop="address">
-								<el-input v-model="form.address"></el-input>
+							<el-form-item label="地址" prop="Address">
+								<el-input v-model="form.Address"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -103,37 +105,37 @@
 		<el-table :data="users" border style="width: 100%;">
 			<el-table-column type="selection" min-width="55">
 			</el-table-column>
-			<el-table-column prop="applyNo" label="申请单号" min-width="120">
+			<el-table-column prop="OrderId" label="申请单号" min-width="120">
 			</el-table-column>
-			<el-table-column prop="hisProjectName" label="HIS项目" min-width="100">
+			<el-table-column prop="HisItem" label="HIS项目" min-width="100">
 			</el-table-column>
-			<el-table-column prop="checkItem" label="检查项目" min-width="100">
+			<el-table-column prop="StudyItem" label="检查项目" min-width="100">
 			</el-table-column>
-			<el-table-column prop="checkType" label="检查类型" min-width="120">
+			<el-table-column prop="StudyType" label="检查类型" min-width="120">
 			</el-table-column>
-			<el-table-column prop="doctorName" label="申请医生" min-width="120">
+			<el-table-column prop="AppDoctor" label="申请医生" min-width="120">
 			</el-table-column>
-			<el-table-column prop="applyDate" label="申请时间" min-width="120">
+			<el-table-column prop="RegisterTime" label="申请时间" min-width="120">
 			</el-table-column>
-			<el-table-column prop="appointmentyStatus" label="预约状态" min-width="120"
+			<el-table-column prop="AppStatus" label="预约状态" min-width="120"
 			:filter-method="appointmentyStatusTag"
-			:filters="[{ text: '已预约', value: '已预约' }, { text: '未预约', value: '未预约' }]">
+			:filters="[{ text: '已预约', value: '1' }, { text: '未预约', value: '0' }]">
 			</el-table-column>
-			<el-table-column prop="free" label="费用" min-width="120">
+			<el-table-column prop="ItemFee" label="费用" min-width="120">
 			</el-table-column>
-			<el-table-column prop="freeStatus" label="收费状态" min-width="120">
+			<el-table-column prop="FeeStatus" label="收费状态" min-width="120">
 			</el-table-column>
-			<el-table-column prop="hospitalName" label="检查医院" min-width="120">
+			<el-table-column prop="ExcuteHospital" label="检查医院" min-width="120">
 			</el-table-column>
-			<el-table-column prop="appointmentDate" label="预约时间" min-width="120">
+			<el-table-column prop="AppTime" label="预约时间" min-width="120">
 			</el-table-column>
 			<el-table-column label="操作" min-width="200" fixed="right">
 				<template slot-scope="scope">
-					<el-button type="text" v-if="scope.row.appointmentyStatus == '已预约'" 
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
 					class="el-icon-edit" @click="dialogFormVisible = true"> 修改</el-button>
-					<el-button type="text" v-if="scope.row.appointmentyStatus == '已预约'" 
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
 					class="el-icon-delete" @click="dialogFormVisible = true"> 取消</el-button>	
-					<el-button type="text" v-if="scope.row.appointmentyStatus == '未预约'" 
+					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
 					class="el-icon-date" @click="dialogFormVisible = true"> 预约</el-button>
 				</template>
 			</el-table-column>
@@ -145,40 +147,40 @@
 			<el-form :model="appointmentForm" label-position="right" :rules="appointmentRules">
 				<el-row :gutter="10" style="margin-bottom: 5px; margin-top 5px;">
 					<el-col :span="12">
-						<el-form-item label="检查医院" prop="hospital">
-							<el-select v-model="appointmentForm.hospital" placeholder="请选择医院" @change="selectAppointmentDate">
-								<el-option label="江阴市中医院" value="1"></el-option>
+						<el-form-item label="检查医院" prop="studyHospital">
+							<el-select v-model="appointmentForm.studyHospital" placeholder="请选择医院" @change="selectAppointmentDate">
+								<el-option label="B医院" value="B医院"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="检查类型" prop="checkType">
-							<el-select v-model="appointmentForm.checkType" placeholder="请选择检查类型" @change="selectAppointmentDate">
-								<el-option label="CT" value="1"></el-option>
-								<el-option label="MR" value="2"></el-option>
+						<el-form-item label="检查类型" prop="studyType">
+							<el-select v-model="appointmentForm.studyType" placeholder="请选择检查类型" @change="selectAppointmentDate">
+								<el-option label="CT" value="CT"></el-option>
+								<el-option label="MR" value="MR"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="10" style="margin-bottom: 5px; margin-top 5px;">
 					<el-col :span="12">
-						<el-form-item label="检查项目" prop="checkItem">
-							<el-select v-model="appointmentForm.checkItem" placeholder="请选择检查项目">
-								<el-option label="头颅平扫（增强）" value="1"></el-option>
+						<el-form-item label="检查项目" prop="studyItem">
+							<el-select v-model="appointmentForm.studyItem" placeholder="请选择检查项目" @change="selectAppointmentDate">
+								<el-option label="腹部平扫" value="腹部平扫"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="扫描方式" prop="scanType">
-							<el-select v-model="appointmentForm.scanType" placeholder="请选择扫描方式">
-								<el-option label="增强" value="1"></el-option>
+							<el-select v-model="appointmentForm.scanType" placeholder="请选择扫描方式" @change="selectAppointmentDate">
+								<el-option label="平扫" value="平扫"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="9">
-						<datepicker :inline="true" :language='zh' v-model="appointmentForm.date"
+						<datepicker :inline="true" :language='zh' v-model="appointmentForm.appDate"
 						:highlighted="highlighted" calendar-class="calendar-class"></datepicker>
 					</el-col>
 					<el-col :span="15">
@@ -188,93 +190,16 @@
 								<span style="float: right;">0/10=已预约号源/总号源</span>
 							</div>
 							<div class="list">
-								<div v-for="(item, index) in [1,2,3,4,5,6,7]" :key="index">
+								<div v-for="(item, index) in this.appDateList" :key="index">
 									<el-card shadow="never" class="item">
-											<div>08:00-08:30</div>
+											<div>{{item.BegTime}}-{{item.EndTime}}</div>
 											<div style="margin-top:8px">
-												0/4
+												{{item.AppedNumber}}/{{item.TotalNumber}}
 												<el-checkbox style="float: right;"></el-checkbox>
 											</div>
 									</el-card>
 								</div>
-								
 							</div>
-							<!-- <el-row :gutter="5">
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-							</el-row>
-							<el-row :gutter="5">
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-								<el-col :span="6">
-									<el-card shadow="never">
-										<div>08:00-08:30</div>
-										<div style="margin-top:8px">
-											0/4
-											<el-checkbox style="float: right;"></el-checkbox>
-										</div>
-									</el-card>
-								</el-col>
-							</el-row> -->
 						</el-card>
 					</el-col>
 				</el-row>
@@ -361,31 +286,32 @@
 				zh: zh,
 				activeNames: ['1'],
 				form: {
-					hisNo: '',
+					HisCode: '',
 					hisType: '1',
-					name: '',
-					sex: '',
-					age: '',
-					phoneNum: '',
-					outPatientNo: '',
-					inPatientNo: '',
-					recordNum: '',
-					cardNo: '',
-					patientType: '',
+					PatientName: '',
+					Sex: '',
+					Age: '',
+					PhoneNumber: '',
+					PatientID: '',
+					BedNo: '',
+					PatientRecordNo: '',
+					ChinaIdCard: '',
+					PatientType: '1',
 					isRemain: false,
 					equipment: '',
-					address: ''
+					Address: ''
 				},
 				users: [],
 				dialogFormVisible: false,
 				successDialogVisible: false,
 				appointmentForm: {
-					hospital: '',
-					checkType: '',
-					checkItem: '',
+					studyHospital: '',
+					studyType: '',
+					studyItem: '',
 					scanType: '',
-					date: new Date()
+					appDate: new Date()
 				},
+				appDateList:[],
 				appointmentRules: {
 					hospital: [
 						{ required: true, message: '请选择医院', trigger: 'change' }
@@ -406,28 +332,72 @@
 			reset(){
 				this.$refs.form.resetFields();
 			},
-			search(){
-				var patientParams = {
-					hisNo: this.form.hisNo,
-					hisType: this.form.hisType
-				};
+			async search(){
+				var msgBody = {
+					root: {
+						"patientType": this.form.PatientType,
+        		"HisCode": '1523654'
+					}
+				}
 
-				const res = this.$http.get('/patient/info', patientParams).then(res => {
-					let { code, data } = res.data;
-					this.users = data.users;
-					this.form = data;
-				});
+				var patientParams = {
+					msgHeader : '{"root":{"serviceName":"getPatientInfor"}',
+					msgBody : JSON.stringify(msgBody)
+				}
+				const res = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+				if(res.data.length > 0){
+					this.form = res.data[0];
+				}
+
+				patientParams = {
+					msgHeader : '{"root":{"serviceName":"getOrderInfor"}',
+					msgBody : JSON.stringify(msgBody)
+				}
+				const res1 = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+				if(res1.data.length > 0){
+					this.users = res1.data;
+				}
+
+
 			},
 			async selectAppointmentDate() {
-			    if(this.appointmentForm.hospital != '' && this.appointmentForm.checkType != ''){
-					var appointmentParams = {
-						hospital: this.appointmentForm.hospital,
-						checkType: this.appointmentForm.checkType
+				if(this.appointmentForm.studyHospital != undefined && this.appointmentForm.studyHospital != '' 
+				&& this.appointmentForm.studyType != undefined && this.appointmentForm.studyType != ''){
+					var msgBody = {
+						root: {
+							studyHospital: this.appointmentForm.studyHospital,
+							studyType: this.appointmentForm.studyType,
+							studyItem: this.appointmentForm.studyItem,
+							scanType: this.appointmentForm.scanType,
+							appDate: '2019-05-08'
+							// appDate: this.dateToString(this.appointmentForm.appDate)
+						}
 					}
-					const res = await this.$http.post('/appointment/date', appointmentParams);
-					let { code, data } = res.data;
-					data.forEach((item, index)=>{
-							this.highlighted.dates.push(this.stringTimeToDate(item.date));
+					
+					var appParams = {
+						msgHeader : '{"root":{"serviceName":"getAppNmber"}',
+						msgBody : JSON.stringify(msgBody)
+					}
+					const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appParams);
+
+					if (res.data.errorInfor != undefined && res.data.errorInfor != ''){
+						this.$message({
+							message: res.data.errorInfor,
+							type: 'warning',
+							showClose: true
+						});
+					}
+				
+					res.data.forEach((item, index)=>{
+							//this.highlighted.dates.push(this.stringTimeToDate(item.date));
+							var appDateItem = {
+								BegTime: item.BegTime.substring(0,5),
+								EndTime: item.EndTime.substring(0,5),
+								AppedNumber: item.AppedNumber,
+								TotalNumber: item.TotalNumber
+							}
+
+							this.appDateList.push(appDateItem);
 					});
 				}
 			},
@@ -436,6 +406,19 @@
 			},
 			appointmentyStatusTag(value, row){
 				row.appointmentyStatus = value;
+			},
+			dateToString(date){
+				var year = date.getFullYear(); 
+				var month =(date.getMonth() + 1).toString(); 
+				var day = (date.getDate()).toString();  
+				if (month.length == 1) { 
+						month = "0" + month; 
+				} 
+				if (day.length == 1) { 
+						day = "0" + day; 
+				}
+				var dateTime = year + "-" + month + "-" + day;
+				return dateTime; 
 			},
 			stringTimeToDate(timeStr){
         var resDate;
