@@ -82,8 +82,8 @@
 					</el-row>
 					<el-row :gutter="10">
 						<el-col :span="6">
-							<el-form-item label="陪检设备" prop="equipment">
-								<el-input v-model="form.equipment"></el-input>
+							<el-form-item label="陪检设备" prop="modality">
+								<el-input v-model="form.modality"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="18">
@@ -131,12 +131,12 @@
 			</el-table-column>
 			<el-table-column label="操作" min-width="200" fixed="right">
 				<template slot-scope="scope">
-					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
-					class="el-icon-edit" @click="dialogFormVisible = true"> 修改</el-button>
-					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
-					class="el-icon-delete" @click="dialogFormVisible = true"> 取消</el-button>	
 					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
-					class="el-icon-date" @click="dialogFormVisible = true"> 预约</el-button>
+					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
+					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
+					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
+					class="el-icon-date" @click="dialogFormVisible = true; isEditOrNew='new'; selectDataItem=scope.row;"> 预约</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -195,7 +195,9 @@
 											<div>{{item.BegTime}}-{{item.EndTime}}</div>
 											<div style="margin-top:8px">
 												{{item.AppedNumber}}/{{item.TotalNumber}}
-												<el-checkbox style="float: right;"></el-checkbox>
+												<el-checkbox-group v-model="checkList">
+													<el-checkbox style="float: right;" :label=item.BegTime></el-checkbox>
+												</el-checkbox-group>
 											</div>
 									</el-card>
 								</div>
@@ -206,7 +208,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align:center">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible = false; successDialogVisible = true;">确 定</el-button>
+				<el-button type="primary" @click="doAppointment()">确 定</el-button>
 			</div>
 		</el-dialog>
 
@@ -221,6 +223,19 @@
 				<el-button type="primary" @click="successDialogVisible = false">关闭并打印</el-button>
 			</div>
 		</el-dialog>
+
+
+    <el-dialog
+      title="提示"
+      :visible.sync="cancelAppointmentDialog"
+      width="30%"
+      :before-close="cancelAppointmentDialogHandleClose">
+      <span>是否取消该预约</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelAppointmentDialogHandleClose">取 消</el-button>
+        <el-button type="primary" @click="cancelAppointmentDialog = false; cancelAppointment();">确 定</el-button>
+      </span>
+    </el-dialog>
 	</div>
 </template>
 
@@ -298,12 +313,15 @@
 					ChinaIdCard: '',
 					PatientType: '1',
 					isRemain: false,
-					equipment: '',
+					modality: '',
 					Address: ''
 				},
+				isEditOrNew: 'new', // 新增还是编辑
 				users: [],
 				dialogFormVisible: false,
-				successDialogVisible: false,
+        successDialogVisible: false,
+        cancelAppointmentDialog: false,
+        selectDataItem: {},
 				appointmentForm: {
 					studyHospital: '',
 					studyType: '',
@@ -401,12 +419,109 @@
 					});
 				}
 			},
-			appointment(index, row){
-				
+			async doAppointment(index, row){
+				var user = JSON.parse(sessionStorage.getItem('user'));
+
+				var msgBody = {
+					root: {
+						patientInfor: {
+							patientType: this.form.PatientType,
+							HisCode: this.form.HisCode,
+							getTime: '',
+							patientName: this.form.PatientName,
+							sex: this.form.Sex,
+							age: this.form.Age,
+							ageUnit: '岁',
+							phoneNumber: this.formPhoneNumber,
+							patientID: this.form.PatientID,
+							bedNo: this.form.BedNo,
+							patientRecordNo: this.form.PatientRecordNo,
+							ChinaIdCard: this.form.ChinaIdCard,
+							modality: this.form.modality,
+							address: this.form.Address,
+							OtherInfor: '',
+							orderList:{
+								orderId: this.selectDataItem.OrderId,
+								studyItem: this.appointmentForm.studyItem,
+								HisItem: this.selectDataItem.HisItem,
+								studyType: this.appointmentForm.studyType,
+								AppDoctor: user.name,
+								AppDoctorID: user.id,
+								registerTime: user.name,
+								AppStatus: this.selectDataItem.AppStatus,
+								ItemFee: this.selectDataItem.ItemFee,
+								FeeStatus: this.selectDataItem.FeeStatus,
+								AppHospital: this.appointmentForm.studyHospital,
+								ExcuteHospital: this.appointmentForm.studyHospital,
+								AppTime: this.selectDataItem.AppTime,
+								AppTimeSeg: ''
+							}
+
+						}
+					}
+				}
+
+				var appCancelParams = {
+          msgHeader : this.isEditOrNew == 'new' ? '{"root":{"serviceName":"sendAppInfor"}' : '{"root":{"serviceName":"UpdateAppInfor"}',
+          msgBody : JSON.stringify(msgBody)
+        }
+        const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
+
+			},
+			selectTimeSec(value){
+				//debugger;
+				console.log(value);
 			},
 			appointmentyStatusTag(value, row){
 				row.appointmentyStatus = value;
-			},
+      },
+      cancelAppointmentDialogOpen(row){
+        this.cancelAppointmentDialog = true;
+        this.selectDataItem = row;
+      },
+      cancelAppointmentDialogHandleClose(){
+        this.cancelAppointmentDialog = false;
+        this.selectDataItem = {};
+      },
+      async cancelAppointment(){
+        var row = this.selectDataItem;
+        var user = JSON.parse(sessionStorage.getItem('user'));
+        var msgBody = {
+          root: {
+            cancleInfo: {
+							// patientId: '23265',
+              patientId: this.form.PatientID,
+              visitNo: '',
+              patientType: this.form.PatientType,
+              examType: row.StudyType,
+							applyNo: row.OrderId,
+							// applyNo: '12313',
+              cancleDatetime: new Date(),
+              cancleDoctorID: user.id,
+              cancleDoctorName: user.name
+            }
+          }
+        }
+        var appCancelParams = {
+          msgHeader : '{"root":{"serviceName":"cancleAppInfor"}',
+          msgBody : JSON.stringify(msgBody)
+        }
+        const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
+        // 取消预约成功
+        if(res.data.message == '0'){
+          this.$message({
+            message: res.data.errorInfor,
+            type: 'success'
+          });
+
+          this.search();
+        }
+
+        // 取消预约失败
+        if(res.data.message == '1'){
+          this.$message.error(res.data.errorInfor);
+        }
+      },
 			dateToString(date){
 				var year = date.getFullYear(); 
 				var month =(date.getMonth() + 1).toString(); 

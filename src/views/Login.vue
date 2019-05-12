@@ -106,6 +106,16 @@ export default {
       }
       const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
       if(res.data.root.loginStatus == '登录成功'){
+        var resUser = res.data.root;
+        var user = {
+          id: resUser.UserID,
+          username: resUser.UserName,
+          password: '123456',
+          avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+          name: resUser.UserName
+        }
+        sessionStorage.setItem("user", JSON.stringify(user));
+
         this.$router.push({ path: "/form" });
       }
       //this.$router.push({ path: "/form" });
