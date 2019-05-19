@@ -81,7 +81,7 @@
           </el-row>
           <el-row>
             <el-col :span="24" style="text-align:center">
-              <el-button type="primary">确认</el-button>
+              <el-button type="primary" @click="search">确认</el-button>
               <el-button @click="reset">重置</el-button>
             </el-col>
           </el-row>
@@ -91,25 +91,25 @@
 
 		<!--列表-->
 		<el-table :data="appointmentList" border style="width: 100%;">
-			<el-table-column prop="appointmentStatus" label="预约状态" width="120">
+			<el-table-column prop="AppStatus" label="预约状态" width="120">
 			</el-table-column>
-			<el-table-column prop="free" label="费用" width="100">
+			<el-table-column prop="ItemFee" label="费用" width="100">
 			</el-table-column>
 			<el-table-column prop="freeStatus" label="收费状态" width="100">
 			</el-table-column>
-			<el-table-column prop="applyHospital" label="申请医院" width="120">
+			<el-table-column prop="ExcuteHospital" label="申请医院" width="120">
 			</el-table-column>
-			<el-table-column prop="doctorName" label="申请医生" width="120">
+			<el-table-column prop="AppDoctor" label="申请医生" width="120">
 			</el-table-column>
 			<el-table-column prop="applyDepartment" label="申请科室" width="120">
 			</el-table-column>
-			<el-table-column prop="applyNo" label="申请单号" width="120">
+			<el-table-column prop="OrderId" label="申请单号" width="120">
 			</el-table-column>
-			<el-table-column prop="equipment" label="陪检设备" width="120">
+			<el-table-column prop="Modality" label="陪检设备" width="120">
 			</el-table-column>
-			<el-table-column prop="bedNo" label="床号" width="120">
+			<el-table-column prop="BedNo" label="床号" width="120">
 			</el-table-column>
-			<el-table-column prop="patientType" label="病人类型" width="120">
+			<el-table-column prop="PatientType" label="病人类型" width="120">
 			</el-table-column>
 			<el-table-column label="操作" width="140">
 				<!-- <template scope="scope">
@@ -140,7 +140,8 @@
 					doctorName: '',
 					checkHospital: '',
 					checkType: ''
-				}
+        },
+        appointmentList: []
 			}
 		},
 		methods: {
@@ -149,6 +150,34 @@
 			},
 			reset(){
 				this.$refs.form.resetFields();
+      },
+      async search(){
+				var msgBody = {
+					root: {
+						"patientType": this.searchForm.checkType,
+        		"HisCode": '1523654'
+					}
+				}
+
+				var patientParams = {
+					msgHeader : '{"root":{"serviceName":"getPatientInfor"}',
+					msgBody : JSON.stringify(msgBody)
+				}
+				const res = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+				if(res.data.length > 0){
+					this.form = res.data[0];
+				}
+
+				patientParams = {
+					msgHeader : '{"root":{"serviceName":"getOrderInfor"}',
+					msgBody : JSON.stringify(msgBody)
+				}
+				const res1 = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+				if(res1.data.length > 0){
+					this.appointmentList = res1.data;
+				}
+
+
 			}
 		}
 	};
