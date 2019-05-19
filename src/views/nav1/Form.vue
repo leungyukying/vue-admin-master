@@ -131,11 +131,11 @@
 			</el-table-column>
 			<el-table-column label="操作" min-width="200" fixed="right">
 				<template slot-scope="scope">
-					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
-					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
-					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
-					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
 					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
+					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
+					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
+					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
 					class="el-icon-date" @click="dialogFormVisible = true; isEditOrNew='new'; selectDataItem=scope.row;"> 预约</el-button>
 				</template>
 			</el-table-column>
@@ -195,9 +195,7 @@
 											<div>{{item.BegTime}}-{{item.EndTime}}</div>
 											<div style="margin-top:8px">
 												{{item.AppedNumber}}/{{item.TotalNumber}}
-												<el-checkbox-group v-model="checkList">
-													<el-checkbox style="float: right;" :label=item.BegTime></el-checkbox>
-												</el-checkbox-group>
+												<input type="checkbox" v-model="checkList" :value="item.BegTime + '-' + item.EndTime">
 											</div>
 									</el-card>
 								</div>
@@ -329,6 +327,7 @@
 					scanType: '',
 					appDate: new Date()
 				},
+				checkList:[],
 				appDateList:[],
 				appointmentRules: {
 					hospital: [
@@ -405,7 +404,8 @@
 							showClose: true
 						});
 					}
-				
+
+					this.appDateList = [];
 					res.data.forEach((item, index)=>{
 							//this.highlighted.dates.push(this.stringTimeToDate(item.date));
 							var appDateItem = {
@@ -439,24 +439,23 @@
 							ChinaIdCard: this.form.ChinaIdCard,
 							modality: this.form.modality,
 							address: this.form.Address,
-							OtherInfor: '',
-							orderList:{
-								orderId: this.selectDataItem.OrderId,
-								studyItem: this.appointmentForm.studyItem,
-								HisItem: this.selectDataItem.HisItem,
-								studyType: this.appointmentForm.studyType,
-								AppDoctor: user.name,
-								AppDoctorID: user.id,
-								registerTime: user.name,
-								AppStatus: this.selectDataItem.AppStatus,
-								ItemFee: this.selectDataItem.ItemFee,
-								FeeStatus: this.selectDataItem.FeeStatus,
-								AppHospital: this.appointmentForm.studyHospital,
-								ExcuteHospital: this.appointmentForm.studyHospital,
-								AppTime: this.selectDataItem.AppTime,
-								AppTimeSeg: ''
-							}
-
+							OtherInfor: ''
+						},
+						orderList:{
+							orderId: this.selectDataItem.OrderId,
+							studyItem: this.appointmentForm.studyItem,
+							HisItem: this.selectDataItem.HisItem,
+							studyType: this.appointmentForm.studyType,
+							AppDoctor: user.name,
+							AppDoctorID: user.id,
+							registerTime: '2019-05-19 10:00:00',
+							AppStatus: this.selectDataItem.AppStatus,
+							ItemFee: this.selectDataItem.ItemFee,
+							FeeStatus: this.selectDataItem.FeeStatus,
+							AppHospital: this.appointmentForm.studyHospital,
+							ExcuteHospital: this.appointmentForm.studyHospital,
+							AppTime: this.dateFormatToString(this.selectDataItem.AppTime),
+							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
 						}
 					}
 				}
@@ -466,7 +465,15 @@
           msgBody : JSON.stringify(msgBody)
         }
         const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
+				debugger;
+				if(res.data.message == '0'){
+          this.$message({
+            message: res.data.errorInfor,
+            type: 'success'
+          });
 
+          this.search();
+        }
 			},
 			selectTimeSec(value){
 				//debugger;
@@ -523,6 +530,20 @@
         }
       },
 			dateToString(date){
+				var year = date.getFullYear(); 
+				var month =(date.getMonth() + 1).toString(); 
+				var day = (date.getDate()).toString();  
+				if (month.length == 1) { 
+						month = "0" + month; 
+				} 
+				if (day.length == 1) { 
+						day = "0" + day; 
+				}
+				var dateTime = year + "-" + month + "-" + day;
+				return dateTime; 
+			},
+			dateFormatToString(date){
+				date = new Date(date);
 				var year = date.getFullYear(); 
 				var month =(date.getMonth() + 1).toString(); 
 				var day = (date.getDate()).toString();  
