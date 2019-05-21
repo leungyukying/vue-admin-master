@@ -43,7 +43,7 @@
         </el-form>
       </div>
 
-      <div class="detail-con">
+      <div class="detail-con" style="width: 1000px">
         <el-radio-group v-model="showType" style="margin-bottom: 15px;">
           <el-radio-button label="表格"></el-radio-button>
           <el-radio-button label="图表"></el-radio-button>
