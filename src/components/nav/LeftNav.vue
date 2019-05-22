@@ -36,7 +36,7 @@
           <span>接口维护管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/admin/adminList/ynhyjkgl">院内号源接口管理</el-menu-item>
+          <el-menu-item index="/admin/adminList/ynhyjkgl">HIS接口管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">

@@ -7,17 +7,17 @@
       @close="handleClose"
       background-color="#fff"
     >
-      <el-menu-item index="4">
+      <el-menu-item index="4" @click="$router.push('/yysqtj')">
         <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
+        <span slot="title">预约申请统计</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="5" @click="$router.push('/yyjstj')">
         <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
+        <span slot="title">预约接收统计</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="6" @click="$router.push('/yysqmx')">
         <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
+        <span slot="title">预约申请明细</span>
       </el-menu-item>
     </el-menu>
   </div>

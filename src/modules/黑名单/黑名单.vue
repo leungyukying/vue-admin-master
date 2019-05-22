@@ -19,7 +19,7 @@
         </el-form-item>
 
         <div class="btn-con">
-          <el-button type="primary">确认</el-button>
+          <el-button type="primary" @click="getData">确认</el-button>
           <el-button @click="onSubmit">重置</el-button>
         </div>
       </el-form>
@@ -40,7 +40,28 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    async getData() {
+      var msgBody = {
+        root: {
+          HisCode: "21321",
+          PatientName: null,
+          PhoneNumber: null,
+          BlackTime: "2019-5-11 22:39:22",
+          BlackHospital: "B医院"
+        }
+      };
+
+      var patientParams = {
+        msgHeader: '{"root":{"serviceName":"getBlackList"}',
+        msgBody: JSON.stringify(msgBody)
+      };
+      const res = await this.$http.post(
+        "/GetHisInforInterface/registerInforInterface.asmx/callInterface",
+        patientParams
+      );
+    }
+  },
   components: {
     dataTable
   }
