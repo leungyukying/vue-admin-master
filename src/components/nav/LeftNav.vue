@@ -19,6 +19,7 @@
           <el-menu-item index="/admin/adminList/deptAdmin">医疗机构管理</el-menu-item>
           <el-menu-item index="/admin/adminList/bodyAdmin">检查部位管理</el-menu-item>
           <el-menu-item index="/admin/adminList/dictionaryAdmin">常用字典管理</el-menu-item>
+          <el-menu-item index="/admin/adminList/typeAdmin">检查类型管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

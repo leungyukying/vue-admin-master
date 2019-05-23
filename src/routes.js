@@ -10,6 +10,7 @@ import LeftNav from "./components/nav/LeftNav.vue";
 import BodyAdmin from "./views/admin/base/body-admin.vue";
 import echarts from "./views/charts/echarts.vue";
 import DictionaryAdmin from "./views/admin/base/dictionary-admin.vue";
+import typeAdmin from "./views/admin/base/type-admin";
 import 预约接收统计 from "./modules/预约统计/预约接收统计";
 import 预约申请明细 from "./modules/预约统计/预约申请明细";
 import 预约申请统计 from "./modules/预约统计/预约申请统计";
@@ -96,6 +97,10 @@ let routes = [
           {
             path: "/admin/adminList/dictionaryAdmin",
             component: DictionaryAdmin
+          },
+          {
+            path: "/admin/adminList/typeAdmin",
+            component: typeAdmin
           },
           { path: "/admin/adminList/hygl", component: 号源管理 },
           { path: "/admin/adminList/ynhyjkgl", component: 院内号源接口管理 },

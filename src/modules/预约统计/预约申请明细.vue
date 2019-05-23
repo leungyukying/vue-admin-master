@@ -44,12 +44,12 @@
       </div>
 
       <div class="detail-con" style="width: calc(100vw - 240px)">
-        <el-radio-group v-model="showType" style="margin-bottom: 15px;">
+        <!-- <el-radio-group v-model="showType" style="margin-bottom: 15px;">
           <el-radio-button label="表格"></el-radio-button>
           <el-radio-button label="图表"></el-radio-button>
-        </el-radio-group>
-        <dataTable v-if="showType == '表格'"></dataTable>
-        <chart v-if="showType == '图表'"></chart>
+        </el-radio-group>-->
+        <dataTable></dataTable>
+        <!-- <chart v-if="showType == '图表'"></chart> -->
       </div>
     </div>
   </div>
