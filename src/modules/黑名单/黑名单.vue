@@ -43,21 +43,40 @@ export default {
   methods: {
     async getData() {
       var msgBody = {
+        "?xml": { "@version": "1.0", "@encoding": "utf-8" },
         root: {
           HisCode: "21321",
-          PatientName: null,
-          PhoneNumber: null,
-          BlackTime: "2019-5-11 22:39:22",
-          BlackHospital: "B医院"
+          PatientName: "徐间",
+          PhoneNumber: "32123",
+          BlackTime: "2019-05-22 21:24:00",
+          BlackHospital: "A医院"
+        }
+      };
+      var msgHeader = {
+        "?xml": { "@version": "1.0", "@encoding": "utf-8" },
+        root: {
+          HeaderInfor: {
+            sender: "发送方（请求的医院）",
+            serviceName: "getBlackList",
+            operatorId: "操作者ID",
+            operator: "操作者",
+            callOrg: "调用机构编码",
+            targetOrg: "目标机构编码",
+            event: "事件",
+            PostTime: "2019-5-22 20:52:00"
+          }
         }
       };
 
       var patientParams = {
-        msgHeader: '{"root":{"serviceName":"getBlackList"}',
+        msgHeader: JSON.stringify(msgHeader),
         msgBody: JSON.stringify(msgBody)
       };
+      // let text = `msgHeader=${JSON.stringify(
+      //   msgHeader
+      // )}&msgBody=${JSON.stringify(msgBody)}`;
       const res = await this.$http.post(
-        "/GetHisInforInterface/registerInforInterface.asmx/callInterface",
+        "http://120.79.41.96/blackListInterface/blackList.asmx/callInterface",
         patientParams
       );
     }
