@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" border style="width: 100%">
-    <el-table-column prop="申请医院" label="申请医院" width="180"></el-table-column>
+    <el-table-column prop="检查医院" label="检查医院" width="180"></el-table-column>
     <el-table-column prop="预约检查人数" label="预约检查人数" width="180"></el-table-column>
     <el-table-column prop="完成检查人数" label="完成检查人数"></el-table-column>
     <el-table-column prop="预约检查量" label="预约检查量"></el-table-column>

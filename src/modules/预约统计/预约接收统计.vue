@@ -22,6 +22,12 @@
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="检查医院">
+            <el-select v-model="formInline.region" placeholder="检查医院">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="检查类型">
             <el-select v-model="formInline.region" placeholder="检查类型">
               <el-option label="区域一" value="shanghai"></el-option>
@@ -36,14 +42,14 @@
           </el-form-item>
 
           <div class="btn-con">
-            <el-button type="primary" @click="onSubmit">确认</el-button>
-            <el-button type="primary" @click="onSubmit">导出数据</el-button>
-            <el-button @click="onSubmit">重置</el-button>
+            <el-button type="primary">确认</el-button>
+            <el-button type="primary">导出数据</el-button>
+            <el-button>重置</el-button>
           </div>
         </el-form>
       </div>
 
-      <div class="detail-con" style="width: 1000px">
+      <div class="detail-con" style="width: calc(100vw - 240px)">
         <el-radio-group v-model="showType" style="margin-bottom: 15px;">
           <el-radio-button label="表格"></el-radio-button>
           <el-radio-button label="图表"></el-radio-button>
@@ -57,8 +63,8 @@
 
 <script>
 import leftMenu from "./components/left-menu";
-import dataTable from "./components/dataTable";
-import chart from "./components/chart";
+import dataTable from "./components/dataTable.1";
+import chart from "./components/chart.1";
 export default {
   data() {
     return {

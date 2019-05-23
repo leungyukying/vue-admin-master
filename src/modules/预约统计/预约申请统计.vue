@@ -36,14 +36,14 @@
           </el-form-item>
 
           <div class="btn-con">
-            <el-button type="primary" @click="onSubmit">确认</el-button>
-            <el-button type="primary" @click="onSubmit">导出数据</el-button>
-            <el-button @click="onSubmit">重置</el-button>
+            <el-button type="primary">确认</el-button>
+            <el-button type="primary">导出数据</el-button>
+            <el-button>重置</el-button>
           </div>
         </el-form>
       </div>
 
-      <div class="detail-con" style="width: 1000px">
+      <div class="detail-con" style="width: calc(100vw - 240px)">
         <el-radio-group v-model="showType" style="margin-bottom: 15px;">
           <el-radio-button label="表格"></el-radio-button>
           <el-radio-button label="图表"></el-radio-button>
