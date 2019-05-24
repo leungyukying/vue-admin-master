@@ -353,12 +353,13 @@
 				var msgBody = {
 					root: {
 						"patientType": this.form.PatientType,
-        		"HisCode": '1523654'
+						// "HisCode": '1523654'
+						"HisCode": this.form.HisCode
 					}
 				}
 
 				var patientParams = {
-					msgHeader : '{"root":{"serviceName":"getPatientInfor"}',
+					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"getPatientInfor"}}',
 					msgBody : JSON.stringify(msgBody)
 				}
 				const res = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
@@ -367,7 +368,7 @@
 				}
 
 				patientParams = {
-					msgHeader : '{"root":{"serviceName":"getOrderInfor"}',
+					msgHeader :'{"root":{"HeaderInfor":{"serviceName":"getOrderInfor"}}', 
 					msgBody : JSON.stringify(msgBody)
 				}
 				const res1 = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
@@ -392,7 +393,8 @@
 					}
 					
 					var appParams = {
-						msgHeader : '{"root":{"serviceName":"getAppNmber"}',
+						// msgHeader : '{"root":{"serviceName":"getAppNmber"}',
+						msgHeader : '{"root":{"HeaderInfor":{"serviceName":"getAppNmber"}}',
 						msgBody : JSON.stringify(msgBody)
 					}
 					const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appParams);
@@ -460,11 +462,12 @@
 					}
 				}
 
-				var appCancelParams = {
-          msgHeader : this.isEditOrNew == 'new' ? '{"root":{"serviceName":"sendAppInfor"}' : '{"root":{"serviceName":"UpdateAppInfor"}',
-          msgBody : JSON.stringify(msgBody)
+				var appSendParams = {
+          // msgHeader : this.isEditOrNew == 'new' ? '{"root":{"serviceName":"sendAppInfor"}' : '{"root":{"serviceName":"UpdateAppInfor"}',
+					msgHeader : this.isEditOrNew == 'new' ? '{"root":{"HeaderInfor":{"serviceName":"sendAppInfor"}}' : '{"root":{"HeaderInfor":{"serviceName":"UpdateAppInfor"}}',
+					msgBody : JSON.stringify(msgBody)
         }
-        const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
+        const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appSendParams);
 				debugger;
 				if(res.data.message == '0'){
           this.$message({
@@ -510,7 +513,8 @@
           }
         }
         var appCancelParams = {
-          msgHeader : '{"root":{"serviceName":"cancleAppInfor"}',
+					// msgHeader : '{"root":{"serviceName":"cancleAppInfor"}',
+					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"cancleAppInfor"}}',
           msgBody : JSON.stringify(msgBody)
         }
         const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
