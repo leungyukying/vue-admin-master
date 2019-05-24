@@ -36,20 +36,20 @@
           </el-form-item>
 
           <div class="btn-con">
-            <el-button type="primary" @click="onSubmit">确认</el-button>
-            <el-button type="primary" @click="onSubmit">导出数据</el-button>
-            <el-button @click="onSubmit">重置</el-button>
+            <el-button type="primary">确认</el-button>
+            <el-button type="primary">导出数据</el-button>
+            <el-button>重置</el-button>
           </div>
         </el-form>
       </div>
 
-      <div class="detail-con" style="width: 1000px">
-        <el-radio-group v-model="showType" style="margin-bottom: 15px;">
+      <div class="detail-con" style="width: calc(100vw - 240px)">
+        <!-- <el-radio-group v-model="showType" style="margin-bottom: 15px;">
           <el-radio-button label="表格"></el-radio-button>
           <el-radio-button label="图表"></el-radio-button>
-        </el-radio-group>
-        <dataTable v-if="showType == '表格'"></dataTable>
-        <chart v-if="showType == '图表'"></chart>
+        </el-radio-group>-->
+        <dataTable></dataTable>
+        <!-- <chart v-if="showType == '图表'"></chart> -->
       </div>
     </div>
   </div>
@@ -57,8 +57,8 @@
 
 <script>
 import leftMenu from "./components/left-menu";
-import dataTable from "./components/dataTable";
-import chart from "./components/chart";
+import dataTable from "./components/dataTable.2";
+import chart from "./components/chart.2";
 export default {
   data() {
     return {

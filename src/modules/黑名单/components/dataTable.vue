@@ -1,7 +1,7 @@
 <template>
   <el-table :data="tableData" border style="width: 100%">
-    <el-table-column prop="HIS号" label="HIS号" width="180"></el-table-column>
-    <el-table-column prop="患者姓名" label="患者姓名" width="180"></el-table-column>
+    <el-table-column prop="HIS号" label="HIS号" width="100"></el-table-column>
+    <el-table-column prop="患者姓名" label="患者姓名" width="100"></el-table-column>
     <el-table-column prop="性别" label="性别"></el-table-column>
     <el-table-column prop="联系电话" label="联系电话"></el-table-column>
     <el-table-column prop="加黑状态" label="加黑状态"></el-table-column>
@@ -11,7 +11,7 @@
     <el-table-column prop="身份证号" label="身份证号"></el-table-column>
     <el-table-column prop="设备卡号" label="设备卡号"></el-table-column>
     <el-table-column prop="诊疗卡号" label="诊疗卡号"></el-table-column>
-    <el-table-column prop="操作" label="操作">
+    <el-table-column prop="操作" label="操作" width="150">
       <template slot-scope="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
         <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
