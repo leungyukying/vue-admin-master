@@ -23,7 +23,7 @@
     <div class="main-con">
       <div class="tool-con">
         <div style="flex: 1"></div>
-        <el-button type="primary" icon="plus" size="small">添加</el-button>
+        <el-button type="primary" icon="plus" size="small" @click="editDeptDialogVisible = true">添加</el-button>
       </div>
       <el-table :data="deptData" border style="width: 100%">
         <el-table-column prop="deptName" label="开始时间" min-width="100px"></el-table-column>
@@ -41,36 +41,15 @@
     </div>
 
     <!--弹出手工预约页面-->
-    <el-dialog
-      id="editDeptDialog"
-      :title="editDeptDialogTitle"
-      :visible.sync="editDeptDialogVisible"
-    >
+    <el-dialog id="editDeptDialog" title="添加时段号源" :visible.sync="editDeptDialogVisible">
       <el-form :model="editDeptForm" label-width="100px" :rules="editDeptRules">
-        <el-form-item label="机构名称" prop="deptName">
-          <el-input v-model="editDeptForm.deptName"></el-input>
+        <el-form-item label="开始时间" prop="deptName">
+          <el-date-picker></el-date-picker>
         </el-form-item>
-        <el-form-item label="检查类型" prop="deptCode">
-          <el-input v-model="editDeptForm.deptCode"></el-input>
+        <el-form-item label="结束时间" prop="deptCode">
+          <el-date-picker></el-date-picker>
         </el-form-item>
-        <el-form-item label="上级医院机构" prop="deptPre">
-          <el-select v-model="editDeptForm.deptPre" placeholder="请选择上级医院机构">
-            <el-option label="江阴市中医院" value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="显示顺序" prop="order">
-          <el-input-number v-model="editDeptForm.order" :min="1" :max="10"></el-input-number>
-        </el-form-item>
-        <el-form-item label="检查类型" prop="checkType">
-          <el-select v-model="editDeptForm.checkType" placeholder="请选择检查类型">
-            <el-option label="CT" value="1"></el-option>
-            <el-option label="MR" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="电话" prop="phoneNum">
-          <el-input v-model="editDeptForm.phoneNum"></el-input>
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
+        <el-form-item label="总号源" prop="address">
           <el-input v-model="editDeptForm.address"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
