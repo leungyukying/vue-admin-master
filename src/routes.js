@@ -19,6 +19,8 @@ import 黑名单 from "./modules/黑名单/黑名单";
 import 号源管理 from "./modules/号源管理/号源管理";
 import 院内号源接口管理 from "./modules/接口维护管理/院内号源接口管理";
 import 黑名单管理 from "./modules/系统参数管理/黑名单管理";
+import 角色类型管理 from "./modules/基础字典管理/角色类型管理";
+import 系统用户管理 from "./modules/基础字典管理/系统用户管理";
 
 let routes = [
   {
@@ -104,7 +106,9 @@ let routes = [
           },
           { path: "/admin/adminList/hygl", component: 号源管理 },
           { path: "/admin/adminList/ynhyjkgl", component: 院内号源接口管理 },
-          { path: "/admin/adminList/hmdgl", component: 黑名单管理 }
+          { path: "/admin/adminList/hmdgl", component: 黑名单管理 },
+          { path: "/admin/adminList/jslxgl", component: 角色类型管理 },
+          { path: "/admin/adminList/xtyhgl", component: 系统用户管理 }
         ]
       }
     ]
