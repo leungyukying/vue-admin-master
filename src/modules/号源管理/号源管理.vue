@@ -34,7 +34,7 @@
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" size="small">编辑</el-button>
             <el-button type="danger" size="small" @click="hiddenDept(scope.row)">删除</el-button>
-            <el-button type="danger" size="small" @click="hiddenDept(scope.row)">定向分配</el-button>
+            <!-- <el-button type="danger" size="small" @click="hiddenDept(scope.row)">定向分配</el-button> -->
           </template>
         </el-table-column>
       </el-table>

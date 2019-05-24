@@ -17,13 +17,6 @@
         <div class="item-con">后台管理</div>
         <div class="item-con">超级管理员</div>
         <div class="item-con">登记医生</div>
-        <div class="item-con">黑名单</div>
-        <div class="item-con">主任</div>
-        <div class="item-con">统计</div>
-        <div class="item-con">角色1</div>
-        <div class="item-con">角色2</div>
-        <div class="item-con">角色3</div>
-        <div class="item-con">角色4</div>
       </div>
       <div class="right-part">
         <el-form :model="editDeptForm" label-width="100px">

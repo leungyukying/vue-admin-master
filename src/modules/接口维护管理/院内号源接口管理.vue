@@ -4,33 +4,33 @@
       <el-breadcrumb-item>
         <i class="el-icon-menu"></i> 接口维护管理
       </el-breadcrumb-item>
-      <el-breadcrumb-item>院内号源接口管理</el-breadcrumb-item>
+      <el-breadcrumb-item>HIS接口管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="main-con">
       <div class="left-part">
         <div class="item-con">江阴市中医院</div>
-        <div class="item-con">江阴市中医院</div>
-        <div class="item-con">江阴市中医院</div>
-        <div class="item-con">江阴市中医院</div>
+        <div class="item-con">江阴市北国医院</div>
+        <div class="item-con">江阴市第四医院</div>
+        <div class="item-con">江阴市徐霞客医院</div>
       </div>
       <div class="right-part">
         <el-form :model="editDeptForm" label-width="200px">
-          <el-form-item label="院内预约接口地址" prop="deptName">
+          <el-form-item label="接口地址" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
-          <el-form-item label="获取当天号源" prop="deptName">
+          <el-form-item label="接口类型" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
-          <el-form-item label="获取月份已有号源日期" prop="deptName">
+          <el-form-item label="获取申请单的地址" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
-          <el-form-item label="添加方法" prop="deptName">
+          <el-form-item label="获取部位的地址" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
-          <el-form-item label="更新方法" prop="deptName">
+          <el-form-item label="提交预约的地址" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
-          <el-form-item label="取消方法" prop="deptName">
+          <el-form-item label="收费查询地址" prop="deptName">
             <el-input size="small"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="deptName">
