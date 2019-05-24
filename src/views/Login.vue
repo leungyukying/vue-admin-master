@@ -101,7 +101,7 @@ export default {
         // }
       };
       var loginParams = {
-        msgHeader : '{"root":{"serviceName":"login"}',
+        msgHeader : '{"root":{"HeaderInfor":{"serviceName":"login"}}',
         msgBody : JSON.stringify(msgBody)
       }
       const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);

@@ -17,10 +17,18 @@ import 院内号源接口管理 from "./modules/接口维护管理/院内号源�
 import 黑名单管理 from "./modules/系统参数管理/黑名单管理";
 
 let routes = [
+  // {
+  //   path: "/login",
+  //   component: Login,
+  //   name: "",
+  //   hidden: true
+  // },
   {
-    path: "/login",
+    path: "/",
+    redirect: "/login",
     component: Login,
-    name: "",
+    name: "用户登录",
+    children: [{ path: "/login", component: Login, name: "用户登录" }],
     hidden: true
   },
   {
@@ -29,9 +37,24 @@ let routes = [
     name: "",
     hidden: true
   },
-  //{ path: '/main', component: Main },
+  { path: '/main', component: Main },
+  // {
+  //   path: "/",
+  //   component: Home,
+  //   redirect: "/form",
+  //   name: "信息登记",
+  //   children: [{ path: "/form", component: Form, name: "信息登记" }]
+  // },
+  // {
+  //   path: "/",
+  //   component: Home,
+  //   redirect: "/login",
+  //   component: Login,
+  //   name: "用户登录",
+  //   children: [{ path: "/login", component: Login, name: "用户登录" }]
+  // },
   {
-    path: "/",
+    path: "/form",
     component: Home,
     redirect: "/form",
     name: "信息登记",
