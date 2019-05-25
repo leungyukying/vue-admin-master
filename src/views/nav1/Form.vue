@@ -119,7 +119,8 @@
 			</el-table-column>
 			<el-table-column prop="AppStatus" label="预约状态" min-width="120"
 			:filter-method="appointmentyStatusTag"
-			:filters="[{ text: '已预约', value: '1' }, { text: '未预约', value: '0' }]">
+			:filters="[{ text: '已预约', value: '1' }, { text: '未预约', value: '0' }]"
+			:formatter="formatAppStatus">
 			</el-table-column>
 			<el-table-column prop="ItemFee" label="费用" min-width="120">
 			</el-table-column>
@@ -374,6 +375,7 @@
 
 				if(res.data.length > 0){
 					this.form = res.data[0];
+					this.form.PatientType = this.form.PatientType + '';
 				}
 
 				patientParams = {
@@ -383,6 +385,9 @@
 				const res1 = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
 				if(res1.data.length > 0){
 					this.users = res1.data;
+					this.users.forEach((item, index) => {
+						item.AppTime = this.dateFormatToString(item.AppTime);
+					})
 				}
 
 			},
@@ -395,8 +400,8 @@
 							studyType: this.appointmentForm.studyType,
 							studyItem: this.appointmentForm.studyItem,
 							scanType: this.appointmentForm.scanType,
-							appDate: '2019-05-08'
-							// appDate: this.dateToString(this.appointmentForm.appDate)
+							// appDate: '2019-05-08'
+							appDate: this.appointmentForm.appDate
 						}
 					}
 					
@@ -548,9 +553,8 @@
           this.search();
         }
 			},
-			selectTimeSec(value){
-				//debugger;
-				console.log(value);
+			formatAppStatus(row, column){
+      	return row.AppStatus == '1' ? "已预约" : row.authority == '0' ? "未预约" : "其他";
 			},
 			appointmentyStatusTag(value, row){
 				row.appointmentyStatus = value;
