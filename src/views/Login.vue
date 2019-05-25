@@ -10,11 +10,11 @@
     <h3 class="title">用户登录</h3>
     <el-form-item prop="account">
       <span class="input-type">机构</span>
-      <el-select v-model="value" placeholder="请选择" style="width: 100%">
+      <el-select v-model="ruleForm2.deptName" placeholder="请选择" style="width: 100%" @visible-change="selectDepartment">
         <el-option
-          v-for="item in options"
+          v-for="item in deptOptions"
           :key="item.value"
-          :label="item.label"
+          :label="item.code"
           :value="item.value"
         ></el-option>
       </el-select>
@@ -41,29 +41,18 @@
 </template>
 
 <script>
+import { finished } from 'stream';
 //import NProgress from 'nprogress'
 export default {
   data() {
     return {
       logining: false,
-      options: [
-        {
-          value: "1",
-          label: "机构1"
-        },
-        {
-          value: "2",
-          label: "机构2"
-        },
-        {
-          value: "3",
-          label: "机构1"
-        }
-      ],
+      deptOptions: [],
       value: "",
       ruleForm2: {
-        account: "admin",
-        checkPass: "123456"
+        account: "",
+        checkPass: "",
+        deptName: ""
       },
       rules2: {
         account: [
@@ -92,7 +81,7 @@ export default {
         root: {
           loginAccount: this.ruleForm2.account,
           passWord: this.ruleForm2.checkPass,
-          orgName: 'A医院'
+          orgName: this.ruleForm2.deptName
         }
         // root: {
         //   loginAccount: '9999',
@@ -118,28 +107,39 @@ export default {
 
         this.$router.push({ path: "/form" });
       }
-      //this.$router.push({ path: "/form" });
+    },
+    async selectDepartment(flag){
+      if(!flag){
+        return;
+      }
+
+      if(this.deptOptions.length > 0){
+        return;
+      }
+
+      var queryDeptParams = {
+        msgHeader : '{"root":{"HeaderInfor":{"serviceName":"getHospitalName"}}',
+        msgBody : ''
+      }
+      const res = await this.$http.post("/getDictionaryData/GetData.asmx/callInterface", queryDeptParams);
       
-      // this.$refs.ruleForm2.validate(async valid => {
-      //   if (valid) {
-      //     debugger;
-      //     //_this.$router.replace('/table');
-      //     this.logining = true;
-      //     //NProgress.start();
-      //     // var loginParams = {
-      //     //   username: this.ruleForm2.account,
-      //     //   password: this.ruleForm2.checkPass
-      //     // };
-      //     var loginParams = 'msgHeader={"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"sender": "发送方（即发送请求的医院）","serviceName":"login","operatorId":"操作者ID（即发送请求的医生id）","operator": "操作者（即发送请求的医生的姓名）","callOrg": "调用机构编码","targetOrg": "目标机构编码","event":"事件"}}&msgBody={"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"loginAccount":"9999","passWord":"1","loginTime":"2019-5-2","orgName":"A医院"}}';
-      //     const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
-      //     // let { msg, code, user } = res.data;
-      //     // sessionStorage.setItem("user", JSON.stringify(user));
-      //     //this.$router.push({ path: "/form" });
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      var tmpDeptList = this.uniq(res.data, "HospitalName");
+      tmpDeptList.forEach((item, index) => {
+        var map = {
+          code: item,
+          value: item
+        }
+        this.deptOptions.push(map);
+      });
+    },
+    uniq(array,key){
+      var temp = [];
+      for(var i = 0; i < array.length; i++){
+          if(temp.indexOf(array[i][key]) == -1){
+              temp.push(array[i][key]);
+          }
+      }
+      return temp;
     }
   }
 };
