@@ -10,7 +10,12 @@
     <h3 class="title">用户登录</h3>
     <el-form-item prop="account">
       <span class="input-type">机构</span>
-      <el-select v-model="ruleForm2.deptName" placeholder="请选择" style="width: 100%" @visible-change="selectDepartment">
+      <el-select
+        v-model="ruleForm2.deptName"
+        placeholder="请选择"
+        style="width: 100%"
+        @visible-change="selectDepartment"
+      >
         <el-option
           v-for="item in deptOptions"
           :key="item.value"
@@ -41,7 +46,7 @@
 </template>
 
 <script>
-import { finished } from 'stream';
+import { finished } from "stream";
 //import NProgress from 'nprogress'
 export default {
   data() {
@@ -90,62 +95,71 @@ export default {
         // }
       };
       var loginParams = {
-        msgHeader : '{"root":{"HeaderInfor":{"serviceName":"login"}}',
-        msgBody : JSON.stringify(msgBody)
-      }
-      const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
-      if(res.data.message == '1'){
+        msgHeader: '{"root":{"HeaderInfor":{"serviceName":"login"}}',
+        msgBody: JSON.stringify(msgBody)
+      };
+      const res = await this.$http.post(
+        "/loginInterface/loginAppSys.asmx/callInterface",
+        loginParams
+      );
+      if (res.data.message == "1") {
         this.$message({
-            message: res.data.errorInfor,
-            type: 'warning'
-          });
+          message: res.data.errorInfor,
+          type: "warning"
+        });
 
-          return;
+        return;
       }
-      if(res.data.root.loginStatus == '登录成功'){
+      if (res.data.root.loginStatus == "登录成功") {
         var resUser = res.data.root;
         var user = {
           id: resUser.UserID,
+          OrgCode: resUser.OrgCode,
           username: resUser.UserName,
-          password: '123456',
-          avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+          password: "123456",
+          avatar:
+            "https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png",
           name: resUser.UserName
-        }
+        };
         sessionStorage.setItem("user", JSON.stringify(user));
 
         this.$router.push({ path: "/form" });
       }
     },
-    async selectDepartment(flag){
-      if(!flag){
+    async selectDepartment(flag) {
+      if (!flag) {
         return;
       }
 
-      if(this.deptOptions.length > 0){
+      if (this.deptOptions.length > 0) {
         return;
       }
 
       var queryDeptParams = {
-        msgHeader : '{"root":{"HeaderInfor":{"serviceName":"getHospitalName"}}',
-        msgBody : ''
-      }
-      const res = await this.$http.post("/getDictionaryData/GetData.asmx/callInterface", queryDeptParams);
-      
+        msgHeader: '{"root":{"HeaderInfor":{"serviceName":"getHospitalName"}}',
+        msgBody: ""
+      };
+      const res = await this.$http.post(
+        "/getDictionaryData/GetData.asmx/callInterface",
+        queryDeptParams
+      );
+
       var tmpDeptList = this.uniq(res.data, "HospitalName");
       tmpDeptList.forEach((item, index) => {
         var map = {
           code: item,
           value: item
-        }
+        };
         this.deptOptions.push(map);
+        sessionStorage.deptOptions = JSON.stringify(this.deptOptions);
       });
     },
-    uniq(array,key){
+    uniq(array, key) {
       var temp = [];
-      for(var i = 0; i < array.length; i++){
-          if(temp.indexOf(array[i][key]) == -1){
-              temp.push(array[i][key]);
-          }
+      for (var i = 0; i < array.length; i++) {
+        if (temp.indexOf(array[i][key]) == -1) {
+          temp.push(array[i][key]);
+        }
       }
       return temp;
     }

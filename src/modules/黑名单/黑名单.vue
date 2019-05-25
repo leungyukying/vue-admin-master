@@ -3,29 +3,23 @@
     <div class="search-con shadow">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="His号">
-          <el-input></el-input>
+          <el-input v-model="HisCode"></el-input>
         </el-form-item>
         <el-form-item label="患者姓名">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-select v-model="formInline.region" placeholder="性别">
-            <el-option label="男" value="男"></el-option>
-            <el-option label="女" value="女"></el-option>
-          </el-select>
+          <el-input v-model="PatientName"></el-input>
         </el-form-item>
         <el-form-item label="联系电话">
-          <el-input></el-input>
+          <el-input v-model="PhoneNumber"></el-input>
         </el-form-item>
 
         <div class="btn-con">
           <el-button type="primary" @click="getData">确认</el-button>
-          <el-button @click="onSubmit">重置</el-button>
+          <el-button @click="reset">重置</el-button>
         </div>
       </el-form>
     </div>
     <div class="table-con">
-      <dataTable></dataTable>
+      <dataTable :tableData="tableData" @refresh="getData"></dataTable>
     </div>
   </div>
 </template>
@@ -35,21 +29,35 @@ import dataTable from "./components/dataTable";
 export default {
   data() {
     return {
+      HisCode: "",
+      PatientName: "",
+      PhoneNumber: "",
+      BlackTime: "",
+      BlackHospital: "",
+      tableData: [],
       formInline: {
         region: ""
       }
     };
   },
   methods: {
+    reset() {
+      this.HisCode = "";
+      this.PatientName = "";
+      this.PhoneNumber = "";
+      this.BlackTime = "";
+    },
     async getData() {
       var msgBody = {
         "?xml": { "@version": "1.0", "@encoding": "utf-8" },
         root: {
-          HisCode: "21321",
-          PatientName: "徐间",
-          PhoneNumber: "32123",
-          BlackTime: "2019-05-22 21:24:00",
-          BlackHospital: "A医院"
+          HisCode: this.HisCode,
+          PatientName: this.PatientName,
+          PhoneNumber: this.PhoneNumber,
+          BlackTime: this.BlackTime
+            ? moment(this.BlackTime).format("YYYY-MM-DD HH:mm:ss")
+            : "",
+          BlackHospital: ""
         }
       };
       var msgHeader = {
@@ -57,7 +65,14 @@ export default {
         root: {
           HeaderInfor: {
             sender: "发送方（请求的医院）",
-            serviceName: "getBlackList",
+            serviceName:
+              this.HisCode ||
+              this.PatientName ||
+              this.PhoneNumber ||
+              this.BlackTime ||
+              this.BlackHospital
+                ? "searchBlackList"
+                : "getBlackList",
             operatorId: "操作者ID",
             operator: "操作者",
             callOrg: "调用机构编码",
@@ -72,14 +87,16 @@ export default {
         msgHeader: JSON.stringify(msgHeader),
         msgBody: JSON.stringify(msgBody)
       };
-      // let text = `msgHeader=${JSON.stringify(
-      //   msgHeader
-      // )}&msgBody=${JSON.stringify(msgBody)}`;
+
       const res = await this.$http.post(
-        "http://120.79.41.96/blackListInterface/blackList.asmx/callInterface",
+        "/blackListInterface/blackList.asmx/callInterface",
         patientParams
       );
+      this.tableData = res.data.length ? res.data : [];
     }
+  },
+  created() {
+    this.getData();
   },
   components: {
     dataTable

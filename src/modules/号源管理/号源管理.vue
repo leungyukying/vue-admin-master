@@ -7,58 +7,63 @@
       <el-breadcrumb-item>号源管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div style="margin:15px;">
-      <el-form :model="editDeptForm" label-width="100px" :rules="editDeptRules" :inline="true">
+      <el-form :model="modalData" label-width="100px" :inline="true">
         <el-form-item label="机构名称" prop="deptName">
-          <el-input v-model="editDeptForm.deptName" size="small"></el-input>
+          <el-input v-model="name" size="small"></el-input>
         </el-form-item>
         <el-form-item label="检查类型" prop="deptName">
-          <el-input v-model="editDeptForm.deptName" size="small"></el-input>
+          <el-input v-model="type" size="small"></el-input>
         </el-form-item>
         <el-form-item label="日期" prop="deptName">
           <el-date-picker v-model="date" type="date" placeholder="选择日期" size="small"></el-date-picker>
         </el-form-item>
+        <el-form-item>
+          <el-button
+            style="margin-left: 20px"
+            class="el-icon-search"
+            type="primary"
+            @click="getData"
+          >查询</el-button>
+        </el-form-item>
       </el-form>
     </div>
-
-    <div class="main-con">
-      <div class="tool-con">
-        <div style="flex: 1"></div>
-        <el-button type="primary" icon="plus" size="small" @click="editDeptDialogVisible = true">添加</el-button>
-      </div>
-      <el-table :data="deptData" border style="width: 100%">
-        <el-table-column prop="deptName" label="开始时间" min-width="100px"></el-table-column>
-        <el-table-column prop="deptCode" label="结束时间" min-width="100px"></el-table-column>
-        <el-table-column prop="preDeptName" label="总号源" min-width="100px"></el-table-column>
-        <el-table-column prop="checkType" label="备注" min-width="100px"></el-table-column>
-        <el-table-column label="操作" min-width="200px">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" size="small">编辑</el-button>
-            <el-button type="danger" size="small" @click="hiddenDept(scope.row)">删除</el-button>
-            <!-- <el-button type="danger" size="small" @click="hiddenDept(scope.row)">定向分配</el-button> -->
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column prop="BegTime" label="开始时间" min-width="100px"></el-table-column>
+      <el-table-column prop="EndTime" label="结束时间" min-width="100px"></el-table-column>
+      <el-table-column prop="TotalNumber" label="总号源" min-width="100px"></el-table-column>
+      <el-table-column prop="NumberComment" label="备注" min-width="100px"></el-table-column>
+      <el-table-column label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button @click="openModal(scope.row)" size="small">编辑</el-button>
+          <el-button type="danger" size="small" @click="hiddenDept(scope.row)">隐藏</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <!--弹出手工预约页面-->
-    <el-dialog id="editDeptDialog" title="添加时段号源" :visible.sync="editDeptDialogVisible">
-      <el-form :model="editDeptForm" label-width="100px" :rules="editDeptRules">
-        <el-form-item label="开始时间" prop="deptName">
-          <el-date-picker></el-date-picker>
+    <el-dialog
+      id="editDeptDialog"
+      :title="modalData.NumberIdentity ? '编辑用户' : '新增用户'"
+      :visible.sync="editDeptDialogVisible"
+    >
+      <el-form :model="modalData" label-width="120px">
+        <el-form-item label="开始时间" prop="BegTime">
+          <el-input v-model="modalData.BegTime" type="time"></el-input>
         </el-form-item>
-        <el-form-item label="结束时间" prop="deptCode">
-          <el-date-picker></el-date-picker>
+        <el-form-item label="结束时间" prop="EndTime">
+          <el-input v-model="modalData.EndTime" type="time"></el-input>
         </el-form-item>
         <el-form-item label="总号源" prop="address">
-          <el-input v-model="editDeptForm.address"></el-input>
+          <el-input v-model="modalData.TotalNumber"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="editDeptForm.remark"></el-input>
+          <el-input v-model="modalData.NumberComment"></el-input>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer" style="text-align:center">
         <el-button @click="editDeptDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editDeptDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="post">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -66,66 +71,74 @@
 
 <script>
 import moment from "moment";
+import { getList, addUser } from "../../api/api.2";
 export default {
   data() {
     return {
-      date: moment(),
-      deptData: [
-        {
-          deptName: "1",
-          deptCode: "1",
-          preDeptName: "1",
-          checkType: "1",
-          hidden: "1",
-          order: "1",
-          phoneNum: "1",
-          address: "1",
-          marker: "1"
-        }
-      ],
+      name: "",
+      type: "",
+      date: "",
+      searchWord: "",
+      tableData: [],
       editDeptDialogVisible: false,
-      editDeptDialogTitle: "新增机构",
-      editDeptForm: {
-        deptName: "",
-        deptCode: "",
-        deptPre: "",
-        order: "1",
-        checkType: "",
-        phoneNum: "",
-        address: "",
-        remark: ""
-      },
-      editDeptRules: {
-        deptName: [
-          { required: true, message: "请输入机构名称", trigger: "change" }
-        ],
-        deptCode: [
-          { required: true, message: "请输入机构编码", trigger: "change" }
-        ],
-        order: [
-          { required: true, message: "请输入显示顺序", trigger: "change" }
-        ],
-        checkType: [
-          { required: true, message: "请选择检查类型", trigger: "change" }
-        ]
+      editDeptDialogTitle: "新增/编辑用户",
+      deptOptions: sessionStorage.deptOptions
+        ? JSON.parse(sessionStorage.deptOptions)
+        : [],
+      modalData: {
+        BegTime: "",
+        EndTime: "",
+        TotalNumber: "",
+        NumberComment: "",
+        Deleted: "0"
       }
     };
   },
   methods: {
+    openModal(modal) {
+      this.modalData = {
+        BegTime: "",
+        EndTime: "",
+        TotalNumber: "",
+        NumberComment: "",
+        Deleted: "0"
+      };
+      if (modal) {
+        this.modalData = modal;
+      } else {
+      }
+      this.editDeptDialogVisible = true;
+    },
+    post() {
+      if (this.modalData.NumberIdentity) {
+        addUser(this.modalData, "updateNumber").then(res => {
+          this.editDeptDialogVisible = false;
+          this.getData();
+        });
+      } else {
+        addUser(this.modalData, "addNumber").then(res => {
+          this.editDeptDialogVisible = false;
+          this.getData();
+        });
+      }
+    },
     handleClick(row) {
-      this.editDeptDialogTitle = "修改机构";
+      this.editDeptDialogTitle = "新增/编辑";
       this.editDeptDialogVisible = true;
     },
     hiddenDept(row) {
-      this.$confirm("此操作将隐藏该机构, 是否继续?", "提示", {
+      this.$confirm("此操作将隐藏该用户, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "隐藏成功!"
+          addUser({ ...row, Deleted: "1" }, "updateNumber").then(res => {
+            this.getData();
+            this.$message({
+              type: "success",
+              message: "隐藏成功!"
+            });
           });
         })
         .catch(() => {
@@ -134,14 +147,38 @@ export default {
             message: "已取消隐藏"
           });
         });
+    },
+    deleteBody() {
+      this.$confirm("此操作将删除部位, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    async getData() {
+      // this.name, this.type, this.date
+      getList("T_APP_NUMBER", this.name, this.type, this.date).then(res => {
+        this.tableData = res.data;
+      });
     }
+  },
+  created() {
+    this.getData();
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.tool-con {
-  margin: -25px 15px 15px;
-  display: flex;
-}
+<style scoped>
 </style>
