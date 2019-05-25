@@ -135,7 +135,7 @@
 					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
 					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
 					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
-					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
+					<el-button type="text" v-if="scope.row.AppStatus == '0' ||scope.row.AppStatus == '2' " 
 					class="el-icon-date" @click="dialogFormVisible = true; isEditOrNew='new'; selectDataItem=scope.row;"> 预约</el-button>
 				</template>
 			</el-table-column>
@@ -206,7 +206,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align:center">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="doAppointment()">确 定</el-button>
+				<el-button type="primary" @click="doPreAppointment()">确 定</el-button>
 			</div>
 		</el-dialog>
 
@@ -231,7 +231,7 @@
       <span>是否取消该预约</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancelAppointmentDialogHandleClose">取 消</el-button>
-        <el-button type="primary" @click="cancelAppointmentDialog = false; cancelAppointment();">确 定</el-button>
+        <el-button type="primary" @click="cancelAppointmentDialog = false; cancelPreAppointment();">确 定</el-button>
       </span>
     </el-dialog>
 	</div>
@@ -348,6 +348,7 @@
 			},
 			reset(){
 				this.$refs.form.resetFields();
+				this.users = [];
 			},
 			async search(){
 				var msgBody = {
@@ -363,6 +364,14 @@
 					msgBody : JSON.stringify(msgBody)
 				}
 				const res = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+			
+			if(res.data.message == '1'){
+					this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+					});
+				}
+
 				if(res.data.length > 0){
 					this.form = res.data[0];
 				}
@@ -375,7 +384,6 @@
 				if(res1.data.length > 0){
 					this.users = res1.data;
 				}
-
 
 			},
 			async selectAppointmentDate() {
@@ -421,7 +429,69 @@
 					});
 				}
 			},
-			async doAppointment(index, row){
+			async doPreAppointment(){
+				// todo 请求医院接口
+      	var user = JSON.parse(sessionStorage.getItem('user'));
+
+				var msgBody = {
+					root: {
+						patientInfor: {
+							patientType: this.form.PatientType,
+							HisCode: this.form.HisCode,
+							getTime: '',
+							patientName: this.form.PatientName,
+							sex: this.form.Sex,
+							age: this.form.Age,
+							ageUnit: '岁',
+							phoneNumber: this.formPhoneNumber,
+							patientID: this.form.PatientID,
+							bedNo: this.form.BedNo,
+							patientRecordNo: this.form.PatientRecordNo,
+							ChinaIdCard: this.form.ChinaIdCard,
+							modality: this.form.modality,
+							address: this.form.Address,
+							OtherInfor: ''
+						},
+						orderList:{
+							orderId: this.selectDataItem.OrderId,
+							studyItem: this.appointmentForm.studyItem,
+							HisItem: this.selectDataItem.HisItem,
+							studyType: this.appointmentForm.studyType,
+							AppDoctor: user.name,
+							AppDoctorID: user.id,
+							registerTime: '2019-05-19 10:00:00',
+							AppStatus: this.selectDataItem.AppStatus,
+							ItemFee: this.selectDataItem.ItemFee,
+							FeeStatus: this.selectDataItem.FeeStatus,
+							AppHospital: this.appointmentForm.studyHospital,
+							ExcuteHospital: this.appointmentForm.studyHospital,
+							AppTime: this.dateFormatToString(this.selectDataItem.AppTime),
+							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
+						}
+					}
+				}
+
+				var appSendParams = {
+          // msgHeader : this.isEditOrNew == 'new' ? '{"root":{"serviceName":"sendAppInfor"}' : '{"root":{"serviceName":"UpdateAppInfor"}',
+					msgHeader : this.isEditOrNew == 'new' ? '{"root":{"HeaderInfor":{"serviceName":"sendAppInfor_H"}}' : '{"root":{"HeaderInfor":{"serviceName":"UpdateAppInfor_H"}}',
+					msgBody : JSON.stringify(msgBody)
+        }
+        const res = await this.$http.post('/GetHisInforInterface/registerInforInterface.asmx/callInterface', appSendParams);
+				if(res.data.message == '0'){
+					// 如果成功
+					doAppointment();
+				}else if(res.data.message == '1'){
+					//
+					this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+          });
+				}
+
+
+
+			},
+			async doAppointment(){
 				var user = JSON.parse(sessionStorage.getItem('user'));
 
 				var msgBody = {
@@ -469,10 +539,10 @@
         }
         const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appSendParams);
 				debugger;
-				if(res.data.message == '0'){
+				if(res.data.message == '0' || res.data.message == '1'){
           this.$message({
             message: res.data.errorInfor,
-            type: 'success'
+            type: res.data.message == '0'? 'success' : 'warning'
           });
 
           this.search();
@@ -492,7 +562,47 @@
       cancelAppointmentDialogHandleClose(){
         this.cancelAppointmentDialog = false;
         this.selectDataItem = {};
-      },
+			},
+			
+      async cancelPreAppointment(){
+				//先请求医院接口
+        var row = this.selectDataItem;
+        var user = JSON.parse(sessionStorage.getItem('user'));
+        var msgBody = {
+          root: {
+            cancleInfo: {
+							// patientId: '23265',
+              patientId: this.form.PatientID,
+              visitNo: '',
+              patientType: this.form.PatientType,
+              examType: row.StudyType,
+							applyNo: row.OrderId,
+							// applyNo: '12313',
+              cancleDatetime: new Date(),
+              cancleDoctorID: user.id,
+              cancleDoctorName: user.name
+            }
+          }
+        }
+        var appCancelParams = {
+					// msgHeader : '{"root":{"serviceName":"cancleAppInfor"}',
+					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"cancleAppInfor_H"}}',
+          msgBody : JSON.stringify(msgBody)
+        }
+				const res = await this.$http.post('/GetHisInforInterface/registerInforInterface.asmx/callInterface',appCancelParams);
+				if(res.data.message == '0'){
+					// 如果成功
+					cancelAppointment();
+				}else if(res.data.message == '1'){
+					//if fail
+					this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+          });
+				}
+
+			},
+
       async cancelAppointment(){
         var row = this.selectDataItem;
         var user = JSON.parse(sessionStorage.getItem('user'));
@@ -517,21 +627,26 @@
 					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"cancleAppInfor"}}',
           msgBody : JSON.stringify(msgBody)
         }
-        const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
-        // 取消预约成功
-        if(res.data.message == '0'){
+				const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appCancelParams);
+				if(res.data.message == '0' || res.data.message == '1'){
           this.$message({
             message: res.data.errorInfor,
-            type: 'success'
+            type: res.data.message == '0'? 'success' : 'warning'
           });
+        // 取消预约成功
+        // if(res.data.message == '0'){
+        //   this.$message({
+        //     message: res.data.errorInfor,
+        //     type: 'success'
+        //   });
 
           this.search();
         }
 
         // 取消预约失败
-        if(res.data.message == '1'){
-          this.$message.error(res.data.errorInfor);
-        }
+        // if(res.data.message == '1'){
+        //   this.$message.error(res.data.errorInfor);
+        // }
       },
 			dateToString(date){
 				var year = date.getFullYear(); 

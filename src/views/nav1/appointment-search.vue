@@ -17,7 +17,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="HID号" label-width="90px" prop="hisNo">
+              <el-form-item label="HIS号" label-width="90px" prop="hisNo">
                 <el-input v-model="searchForm.hisNo"></el-input>
               </el-form-item>
             </el-col>
@@ -116,8 +116,19 @@
 					<el-button type="text" class="el-icon-date" @click="appointment(scope.$index, scope.row)"> 预约</el-button>	
 				</template> -->
 				<template>
-					<el-button type="text" class="el-icon-date" @click="dialogFormVisible = true"> 预约</el-button>	
+					<el-button type="text" class="el-icon-date" @click="dialogFormVisible = true" isEditOrNew='edit'> 修改</el-button>
+          <el-button type="text" class="el-icon-date" @click="dialogFormVisible = true"> 取消</el-button>
+          <el-button type="text" class="el-icon-date" @click="dialogFormVisible = true"> 重打</el-button>	
 				</template>
+
+        	<!-- <template slot-scope="scope">
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
+					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
+					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
+					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
+					<el-button type="text" v-if="scope.row.AppStatus == '0'" 
+					class="el-icon-date" @click="dialogFormVisible = true; isEditOrNew='new'; selectDataItem=scope.row;"> 预约</el-button>
+				</template> -->
 			</el-table-column>
 		</el-table>
 	</div>
@@ -141,6 +152,7 @@
 					checkHospital: '',
 					checkType: ''
         },
+        isEditOrNew: 'new', // 新增还是编辑
         appointmentList: []
 			}
 		},
@@ -154,30 +166,43 @@
       async search(){
 				var msgBody = {
 					root: {
-						"patientType": this.searchForm.checkType,
-        		"HisCode": '1523654'
+						searcahCondition: {
+							AppBeginTime: this.dateFormatToString(this.searchForm.appointmentDate[0]),
+							AppEndTime: this.dateFormatToString(this.searchForm.appointmentDate[1]),
+							AppStatus: this.searchForm.appointmentStatus,
+							PatientName: this.searchForm.patientName,
+							PhoneNumber: this.searchForm.phoneNum,
+							PatientId: this.searchForm.outPatientNo,
+							APPHospital: this.searchForm.applyHospital,
+							AppDoctor: this.searchForm.doctorName,
+							ExcuteHospital: this.searchForm.checkHospital,
+							StudyType:this.searchForm.checkType,
+						},
 					}
 				}
 
 				var patientParams = {
-					msgHeader : '{"root":{"serviceName":"getPatientInfor"}',
+					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"searchAppInfor"}}',
 					msgBody : JSON.stringify(msgBody)
 				}
-				const res = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
+				const res = await this.$http.post("/AppSearchInfor/searchInfor.asmx/callInterface", patientParams);
 				if(res.data.length > 0){
 					this.form = res.data[0];
 				}
-
-				patientParams = {
-					msgHeader : '{"root":{"serviceName":"getOrderInfor"}',
-					msgBody : JSON.stringify(msgBody)
+      },
+      dateFormatToString(date){
+				date = new Date(date);
+				var year = date.getFullYear(); 
+				var month =(date.getMonth() + 1).toString(); 
+				var day = (date.getDate()).toString();  
+				if (month.length == 1) { 
+						month = "0" + month; 
+				} 
+				if (day.length == 1) { 
+						day = "0" + day; 
 				}
-				const res1 = await this.$http.post("/GetHisInforInterface/registerInforInterface.asmx/callInterface", patientParams);
-				if(res1.data.length > 0){
-					this.appointmentList = res1.data;
-				}
-
-
+				var dateTime = year + "-" + month + "-" + day;
+				return dateTime; 
 			}
 		}
 	};
