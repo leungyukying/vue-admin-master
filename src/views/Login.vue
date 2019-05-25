@@ -94,6 +94,14 @@ export default {
         msgBody : JSON.stringify(msgBody)
       }
       const res = await this.$http.post("/loginInterface/loginAppSys.asmx/callInterface", loginParams);
+      if(res.data.message == '1'){
+        this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+          });
+
+          return;
+      }
       if(res.data.root.loginStatus == '登录成功'){
         var resUser = res.data.root;
         var user = {
