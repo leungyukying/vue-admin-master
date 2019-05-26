@@ -1,80 +1,44 @@
 <template>
-	<div style="margin:10px">
-		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item><i class="el-icon-menu"></i>  基础字典管理</el-breadcrumb-item>
-			<el-breadcrumb-item>医疗机构管理</el-breadcrumb-item>
-		</el-breadcrumb>
-		<div style="margin:15px;width:30%;display:flex;">
-			<el-button type="primary" style="margin-right:5px" @click="editDeptDialogVisible = true">
+  <div style="margin:10px">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item>
+        <i class="el-icon-menu"></i> 基础字典管理
+      </el-breadcrumb-item>
+      <el-breadcrumb-item>医疗机构管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <div style="margin:15px;width:30%;display:flex;">
+      <el-button type="primary" style="margin-right:5px" @click="editDeptDialogVisible = true">
         <i class="el-icon-plus" style="margin-right: 5px;font-size: 0.5px;"></i>新增机构
       </el-button>
-			<el-input v-model="input" placeholder="机构名称/编码/地址/备注">
-				<el-button class="el-icon-search" slot="append">查询</el-button>
-			</el-input>
-		</div>
-		<el-table
-			:data="deptData"
-			border
-			style="width: 100%">
-			<el-table-column
-			prop="deptName"
-			label="机构名称"
-			width="200">
-			</el-table-column>
-			<el-table-column
-			prop="deptCode"
-			label="机构编码"
-			width="200">
-			</el-table-column>
-			<el-table-column
-			prop="preDeptName"
-			label="上级医院机构"
-			width="170">
-			</el-table-column>
-			<el-table-column
-			prop="checkType"
-			label="检查类型"
-			width="120">
-			</el-table-column>
-			<el-table-column
-			prop="hidden"
-			label="隐藏"
-			width="300">
-			</el-table-column>
-			<el-table-column
-			prop="order"
-			label="顺序"
-			width="120">
-			</el-table-column>
-			<el-table-column
-			prop="phoneNum"
-			label="电话号码"
-			width="160">
-			</el-table-column>
-			<el-table-column
-			prop="address"
-			label="地址"
-			width="200">
-			</el-table-column>
-			<el-table-column
-			prop="marker"
-			label="备注"
-			width="200">
-			</el-table-column>
-			<el-table-column
-			fixed="right"
-			label="操作"
-			width="150">
-				<template slot-scope="scope">
-					<el-button @click="handleClick(scope.row)" size="small">编辑</el-button>
-					<el-button type="danger" size="small" @click="hiddenDept(scope.row)">隐藏</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
+      <el-input v-model="input" placeholder="机构名称/编码/地址/备注">
+        <el-button class="el-icon-search" slot="append">查询</el-button>
+      </el-input>
+    </div>
+    <el-table :data="deptData" border style="width: 100%">
+      <el-table-column prop="deptName" label="机构名称" width="200"></el-table-column>
+      <el-table-column prop="deptCode" label="机构编码" width="200"></el-table-column>
+      <el-table-column prop="preDeptName" label="上级医院机构" width="170"></el-table-column>
+      <el-table-column prop="checkType" label="检查类型" width="120"></el-table-column>
+      <el-table-column prop="hidden" label="隐藏" width="300"></el-table-column>
+      <el-table-column prop="order" label="顺序" width="120"></el-table-column>
+      <el-table-column prop="phoneNum" label="电话号码" width="160"></el-table-column>
+      <el-table-column prop="address" label="地址" width="200"></el-table-column>
+      <el-table-column prop="marker" label="备注" width="200"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" size="small">编辑</el-button>
+          <el-button type="danger" size="small" @click="hiddenDept(scope.row)">隐藏</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-		<!--弹出手工预约页面-->
-		<el-dialog id="editDeptDialog" :title="editDeptDialogTitle" :visible.sync="editDeptDialogVisible">
-			<el-form :model="editDeptForm" label-width="100px" :rules="editDeptRules">
+    <!--弹出手工预约页面-->
+    <el-dialog
+      id="editDeptDialog"
+      :title="editDeptDialogTitle"
+      :visible.sync="editDeptDialogVisible"
+    >
+      <el-form :model="editDeptForm" label-width="100px" :rules="editDeptRules">
         <el-form-item label="机构名称" prop="deptName">
           <el-input v-model="editDeptForm.deptName"></el-input>
         </el-form-item>
@@ -104,131 +68,136 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="editDeptForm.remark"></el-input>
         </el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align:center">
-				<el-button @click="editDeptDialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="editDeptDialogVisible = false">确 定</el-button>
-			</div>
-		</el-dialog>
-	</div>
+      </el-form>
+      <div slot="footer" class="dialog-footer" style="text-align:center">
+        <el-button @click="editDeptDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editDeptDialogVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				deptData: [
-					{
-						"deptName":"1",
-						"deptCode":"1",
-						"preDeptName":"1",
-						"checkType":"1",
-						"hidden":"1",
-						"order":"1",
-						"phoneNum":"1",
-						"address":"1",
-						"marker":"1"
-					}
-				],
-				editDeptDialogVisible: false,
-        editDeptDialogTitle:'新增机构',
-        editDeptForm: {
-          "deptName":"",
-          "deptCode":"",
-          "deptPre":"",
-          "order":"1",
-          "checkType":"",
-          "phoneNum":"",
-          "address":"",
-          "remark":""
-        },
-        editDeptRules: {
-          deptName: [
-						{ required: true, message: '请输入机构名称', trigger: 'change' }
-          ],
-          deptCode: [
-						{ required: true, message: '请输入机构编码', trigger: 'change' }
-          ],
-          order: [
-						{ required: true, message: '请输入显示顺序', trigger: 'change' }
-          ],
-          checkType: [
-						{ required: true, message: '请选择检查类型', trigger: 'change' }
-					]
+export default {
+  data() {
+    return {
+      deptData: [
+        {
+          deptName: "1",
+          deptCode: "1",
+          preDeptName: "1",
+          checkType: "1",
+          hidden: "1",
+          order: "1",
+          phoneNum: "1",
+          address: "1",
+          marker: "1"
         }
-			}
-		},
-		created() {
-			this.search()
-		},
-    methods: {
-			search(){
-				alert(123);
-			},
-      handleClick(row){
-        this.editDeptDialogTitle = '修改机构';
-        this.editDeptDialogVisible = true;
+      ],
+      editDeptDialogVisible: false,
+      editDeptDialogTitle: "新增机构",
+      editDeptForm: {
+        deptName: "",
+        deptCode: "",
+        deptPre: "",
+        order: "1",
+        checkType: "",
+        phoneNum: "",
+        address: "",
+        remark: ""
       },
-      hiddenDept(row){
-        this.$confirm('此操作将隐藏该机构, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      editDeptRules: {
+        deptName: [
+          { required: true, message: "请输入机构名称", trigger: "change" }
+        ],
+        deptCode: [
+          { required: true, message: "请输入机构编码", trigger: "change" }
+        ],
+        order: [
+          { required: true, message: "请输入显示顺序", trigger: "change" }
+        ],
+        checkType: [
+          { required: true, message: "请选择检查类型", trigger: "change" }
+        ]
+      }
+    };
+  },
+  created() {
+    this.search();
+  },
+  methods: {
+    search() {
+      // alert(123);
+    },
+    handleClick(row) {
+      this.editDeptDialogTitle = "修改机构";
+      this.editDeptDialogVisible = true;
+    },
+    hiddenDept(row) {
+      this.$confirm("此操作将隐藏该机构, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           this.$message({
-            type: 'success',
-            message: '隐藏成功!'
+            type: "success",
+            message: "隐藏成功!"
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消隐藏'
-          });          
+            type: "info",
+            message: "已取消隐藏"
+          });
         });
-			},
-      async addHospital(){
-				var msgBody = {
-					root: {
-						HospitalInfor: {
-							HospitalName: this.dateFormatToString(this.searchForm.appointmentDate[0]),
-							HospitalCode: this.dateFormatToString(this.searchForm.appointmentDate[1]),
-							AppHospital: this.searchForm.appointmentStatus,
-							StudyType: this.searchForm.patientName,
-							Deleted: this.searchForm.phoneNum,
-							DisplayOrder: this.searchForm.outPatientNo,
-							PhoneNumber: this.searchForm.applyHospital,
-							Address: this.searchForm.doctorName,
-							Others: this.searchForm.checkHospital,
-						},
-					}
-				}
+    },
+    async addHospital() {
+      var msgBody = {
+        root: {
+          HospitalInfor: {
+            HospitalName: this.dateFormatToString(
+              this.searchForm.appointmentDate[0]
+            ),
+            HospitalCode: this.dateFormatToString(
+              this.searchForm.appointmentDate[1]
+            ),
+            AppHospital: this.searchForm.appointmentStatus,
+            StudyType: this.searchForm.patientName,
+            Deleted: this.searchForm.phoneNum,
+            DisplayOrder: this.searchForm.outPatientNo,
+            PhoneNumber: this.searchForm.applyHospital,
+            Address: this.searchForm.doctorName,
+            Others: this.searchForm.checkHospital
+          }
+        }
+      };
 
-				var patientParams = {
-					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"sysncHospital"}}',
-					msgBody : JSON.stringify(msgBody)
-				}
-				const res = await this.$http.post("/sysncDataInterface/sysncDictionary.asmx/callInterface", patientParams);
-				if(res.data.message == '1'){
+      var patientParams = {
+        msgHeader: '{"root":{"HeaderInfor":{"serviceName":"sysncHospital"}}',
+        msgBody: JSON.stringify(msgBody)
+      };
+      const res = await this.$http.post(
+        "/sysncDataInterface/sysncDictionary.asmx/callInterface",
+        patientParams
+      );
+      if (res.data.message == "1") {
         this.$message({
-            message: res.data.errorInfor,
-            type: 'warning'
-          });
+          message: res.data.errorInfor,
+          type: "warning"
+        });
 
-          return;
-      }else if(res.data.message == '0'){
-				editDeptDialogVisible = false;
-
-			}
-				// if(res.data.length > 0){
-				// 	this.form = res.data[0];
-				// }
-      },
-
+        return;
+      } else if (res.data.message == "0") {
+        editDeptDialogVisible = false;
+      }
+      // if(res.data.length > 0){
+      // 	this.form = res.data[0];
+      // }
     }
-	}
-
+  }
+};
 </script>
 
 <style scoped>
-
 </style>
