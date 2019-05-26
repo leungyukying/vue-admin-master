@@ -77,7 +77,7 @@ export const addUser = (modalData, event) => {
     },
     root: {
       NumberInfor: {
-        StudyHospital: "发放号源的医院",
+        StudyHospital: JSON.parse(sessionStorage.user).OrgCode,
         BegTime: "预约检查开始时间",
         EndTime: "预约检查结束",
         TotalNumber: "总号源数",
@@ -85,7 +85,9 @@ export const addUser = (modalData, event) => {
         RemainNumber: "剩余号源数",
         StudyType: "检查类型",
         StudyItem: "检查项目",
-        AppDate: "号源开放日期",
+        AppDate: moment()
+          .add(1, "days")
+          .format("YYYY-MM-DD"),
         NumberComment: "号源备注",
         Deleted: "隐藏标志"
       }
@@ -93,7 +95,12 @@ export const addUser = (modalData, event) => {
   };
 
   Object.assign(msgBody.root.NumberInfor, modalData);
-
+  msgBody.root.NumberInfor.BegTime = moment(
+    msgBody.root.NumberInfor.BegTime
+  ).format("HH:mm:ss");
+  msgBody.root.NumberInfor.EndTime = moment(
+    msgBody.root.NumberInfor.EndTime
+  ).format("HH:mm:ss");
   delete msgBody.root.NumberInfor.NumberIdentity;
 
   var patientParams = {
