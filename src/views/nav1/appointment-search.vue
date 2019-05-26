@@ -2,11 +2,11 @@
 	<div style="width: 100%">
 		<el-collapse v-model="activeNames">
 			<el-collapse-item title="基本信息" name="1">
-        <el-form ref="searchForm" label-position="right" label-width="70px" :model="searchForm"
+        <el-form ref="searchForm" label-position="right" label-width="75px" :model="searchForm"
         @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
           <el-row :gutter="10">
             <el-col :span="12">
-              <el-form-item label="预约时间" prop="appointmentDate">
+              <el-form-item label="*预约时间" prop="appointmentDate">
                 <el-date-picker
                   v-model="searchForm.appointmentDate"
                   type="daterange"
@@ -22,7 +22,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="预约状态" label-width="90px" prop="appointmentStatus">
+              <el-form-item label="*预约状态" label-width="90px" prop="appointmentStatus">
                 <el-select v-model="searchForm.appointmentStatus">
                   <el-option label="已预约" value="1"></el-option>
                   <el-option label="未预约" value="2"></el-option>
@@ -48,8 +48,14 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="申请医院" label-width="90px" prop="applyHospital">
-                <el-select v-model="searchForm.applyHospital" placeholder="请选择医院">
-                  <el-option label="江阴市中医院" value="1"></el-option>
+                <el-select v-model="searchForm.applyHospital" placeholder="请选择医院" @visible-change="selectDepartment">
+								 <el-option
+										v-for="item in deptOptions"
+										:key="item.value"
+										:label="item.code"
+										:value="item.value"
+									></el-option>
+                  <!-- <el-option label="江阴市中医院" value="1"></el-option> -->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -62,16 +68,28 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="检查医院" label-width="90px" prop="checkHospital">
-                <el-select v-model="searchForm.checkHospital" placeholder="请选择医院">
-                  <el-option label="江阴市中医院" value="1"></el-option>
+                <el-select v-model="searchForm.checkHospital" placeholder="请选择医院" @visible-change="selectDepartment">
+									<el-option
+										v-for="item in deptOptions"
+										:key="item.value"
+										:label="item.code"
+										:value="item.value"
+									></el-option>
+                  <!-- <el-option label="江阴市中医院" value="1"></el-option> -->
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="检查类型" label-width="90px" prop="checkType">
                 <el-select v-model="searchForm.checkType">
-                  <el-option label="CT" value="1"></el-option>
-                  <el-option label="MR" value="2"></el-option>
+                  <!-- <el-option label="CT" value="1"></el-option>
+                  <el-option label="MR" value="2"></el-option> -->
+								<el-option label="CT" value="CT"></el-option>
+								<el-option label="MR" value="MR"></el-option>
+								<el-option label="DR" value="DR"></el-option>
+								<el-option label="超声" value="超声"></el-option>
+								<el-option label="内镜" value="内镜"></el-option>
+								<el-option label="放射" value="放射"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -153,7 +171,8 @@
 					checkType: ''
         },
         isEditOrNew: 'new', // 新增还是编辑
-        appointmentList: []
+				appointmentList: [],
+				deptOptions: []
 			}
 		},
 		methods: {
@@ -186,6 +205,14 @@
 					msgBody : JSON.stringify(msgBody)
 				}
 				const res = await this.$http.post("/AppSearchInfor/searchInfor.asmx/callInterface", patientParams);
+				if(res.data.message == '1'){
+        this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+          });
+
+          return;
+      }
 				if(res.data.length > 0){
 					this.form = res.data[0];
 				}
@@ -203,8 +230,46 @@
 				}
 				var dateTime = year + "-" + month + "-" + day;
 				return dateTime; 
-			}
-		}
+			},
+
+			async selectDepartment(flag) {
+      if (!flag) {
+        return;
+      }
+
+      if (this.deptOptions.length > 0) {
+        return;
+      }
+
+      var queryDeptParams = {
+        msgHeader: '{"root":{"HeaderInfor":{"serviceName":"getHospitalName"}}',
+        msgBody: ""
+      };
+      const res = await this.$http.post(
+        "/getDictionaryData/GetData.asmx/callInterface",
+        queryDeptParams
+      );
+
+      var tmpDeptList = this.uniq(res.data, "HospitalName");
+      tmpDeptList.forEach((item, index) => {
+        var map = {
+          code: item,
+          value: item
+        };
+        this.deptOptions.push(map);
+      });
+    },
+    uniq(array, key) {
+      var temp = [];
+      for (var i = 0; i < array.length; i++) {
+        if (temp.indexOf(array[i][key]) == -1) {
+          temp.push(array[i][key]);
+        }
+      }
+      return temp;
+    }
+  }
+		
 	};
 
 </script>

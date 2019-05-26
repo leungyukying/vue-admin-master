@@ -114,7 +114,7 @@ export default {
         var resUser = res.data.root;
         var user = {
           id: resUser.UserID,
-          OrgCode: resUser.OrgCode,
+          OrgCode: this.ruleForm2.deptName,
           username: resUser.UserName,
           password: "123456",
           avatar:
@@ -151,7 +151,6 @@ export default {
           value: item
         };
         this.deptOptions.push(map);
-        sessionStorage.deptOptions = JSON.stringify(this.deptOptions);
       });
     },
     uniq(array, key) {

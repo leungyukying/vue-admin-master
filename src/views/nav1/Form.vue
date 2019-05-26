@@ -2,7 +2,7 @@
 	<div style="width: 100%">
 		<el-collapse v-model="activeNames">
 			<el-collapse-item title="基本信息" name="1">
-				<el-form ref="form" label-position="right" label-width="70px" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
+				<el-form ref="form" label-position="right" label-width="75px" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
 					<el-row :gutter="10">
 						<el-col :span="12">
 							<el-form-item label="HIS号" prop="HisCode">
@@ -17,12 +17,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="姓名" label-width="90px" prop="PatientName">
+							<el-form-item label="*姓名" label-width="90px" prop="PatientName">
 								<el-input v-model="form.PatientName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="性别" prop="Sex">
+							<el-form-item label="*性别" prop="Sex">
 								<el-select v-model="form.Sex" placeholder="请选择性别">
 									<el-option label="男" value="男"></el-option>
 									<el-option label="女" value="女"></el-option>
@@ -32,14 +32,14 @@
 					</el-row>
 					<el-row :gutter="10">
 						<el-col :span="6">
-							<el-form-item label="年龄" prop="Age">
+							<el-form-item label="*年龄" prop="Age">
 								<el-input v-model="form.Age">
 									<template slot="append">岁</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="联系电话" prop="PhoneNumber">
+							<el-form-item label="*联系电话" prop="PhoneNumber">
 								<el-input v-model="form.PhoneNumber"></el-input>
 							</el-form-item>
 						</el-col>
@@ -94,7 +94,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24" style="text-align:center">
-							<el-button type="primary">手工预约</el-button>
+							<el-button type="primary" @click="handmadeAppointment">手工预约</el-button>
 							<el-button @click="reset">重置</el-button>
 						</el-col>
 					</el-row>
@@ -118,8 +118,6 @@
 			<el-table-column prop="RegisterTime" label="申请时间" min-width="120">
 			</el-table-column>
 			<el-table-column prop="AppStatus" label="预约状态" min-width="120"
-			:filter-method="appointmentyStatusTag"
-			:filters="[{ text: '已预约', value: '1' }, { text: '未预约', value: '0' }]"
 			:formatter="formatAppStatus">
 			</el-table-column>
 			<el-table-column prop="ItemFee" label="费用" min-width="120">
@@ -133,7 +131,7 @@
 			<el-table-column label="操作" min-width="200" fixed="right">
 				<template slot-scope="scope">
 					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
-					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit'"> 修改</el-button>
+					class="el-icon-edit" @click="dialogFormVisible = true; isEditOrNew='edit';selectDataItem=scope.row;"> 修改</el-button>
 					<el-button type="text" v-if="scope.row.AppStatus == '1'" 
 					class="el-icon-delete" @click="cancelAppointmentDialogOpen(scope.row)"> 取消</el-button>	
 					<el-button type="text" v-if="scope.row.AppStatus == '0' ||scope.row.AppStatus == '2' " 
@@ -149,8 +147,14 @@
 				<el-row :gutter="10" style="margin-bottom: 5px; margin-top 5px;">
 					<el-col :span="12">
 						<el-form-item label="检查医院" prop="studyHospital">
-							<el-select v-model="appointmentForm.studyHospital" placeholder="请选择医院" @change="selectAppointmentDate">
-								<el-option label="B医院" value="B医院"></el-option>
+							<el-select v-model="appointmentForm.studyHospital" placeholder="请选择医院" @change="selectAppointmentDate" @visible-change="selectDepartment">
+								<!-- <el-option label="B医院" value="B医院"></el-option> -->
+        				<el-option
+                    v-for="item in deptOptions"
+                    :key="item.value"
+                    :label="item.code"
+                    :value="item.value"
+                ></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -159,6 +163,10 @@
 							<el-select v-model="appointmentForm.studyType" placeholder="请选择检查类型" @change="selectAppointmentDate">
 								<el-option label="CT" value="CT"></el-option>
 								<el-option label="MR" value="MR"></el-option>
+								<el-option label="DR" value="DR"></el-option>
+								<el-option label="超声" value="超声"></el-option>
+								<el-option label="内镜" value="内镜"></el-option>
+								<el-option label="放射" value="放射"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -175,6 +183,10 @@
 						<el-form-item label="扫描方式" prop="scanType">
 							<el-select v-model="appointmentForm.scanType" placeholder="请选择扫描方式" @change="selectAppointmentDate">
 								<el-option label="平扫" value="平扫"></el-option>
+								<el-option label="增强" value="增强"></el-option>
+								<el-option label="平扫+增强" value="平扫+增强"></el-option>
+								<el-option label="有痛" value="有痛"></el-option>
+								<el-option label="无痛" value="无痛"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -219,7 +231,7 @@
 			<hr style="width: 290px">
 			<div type="text" style="font-size:15px; display:block; text-align: center; color: #909399;">预约检查时间：2019-04-21 10:00-10:30</div>
 			<div slot="footer" class="dialog-footer" style="text-align:center">
-				<el-button type="primary" @click="successDialogVisible = false">关闭并打印</el-button>
+				<el-button type="primary" @click="successDialogVisible = false; dialogFormVisible=false">关闭并打印</el-button>
 			</div>
 		</el-dialog>
 
@@ -319,7 +331,8 @@
 				users: [],
 				dialogFormVisible: false,
         successDialogVisible: false,
-        cancelAppointmentDialog: false,
+				cancelAppointmentDialog: false,
+				deptOptions: [],
         selectDataItem: {},
 				appointmentForm: {
 					studyHospital: '',
@@ -351,6 +364,45 @@
 				this.$refs.form.resetFields();
 				this.users = [];
 			},
+      handmadeAppointment(){
+				if(this.form.HisCode == ''){
+					this.$message({
+            message: '请输入HIS号',
+            type: 'warning'
+					});
+					return;
+				}
+				if(this.form.PatientName == ''){
+					this.$message({
+            message: '请输入姓名',
+            type: 'warning'
+					});
+					return;
+				}
+				if(this.form.Sex == ''){
+					this.$message({
+            message: '请选择性别',
+            type: 'warning'
+					});
+					return;
+				}
+				if(this.form.Age == ''){
+					this.$message({
+            message: '请输入年龄',
+            type: 'warning'
+					});
+					return;
+				}
+				if(this.form.PhoneNumber == ''){
+					this.$message({
+            message: '请输入联系电话',
+            type: 'warning'
+					});
+					return;
+				}
+				this.dialogFormVisible=true;
+			},
+
 			async search(){
 				var msgBody = {
 					root: {
@@ -391,6 +443,43 @@
 				}
 
 			},
+		async selectDepartment(flag) {
+			// debugger;
+      if (!flag) {
+        return;
+      }
+
+      if (this.deptOptions.length > 0) {
+        return;
+      }
+
+      var queryDeptParams = {
+        msgHeader: '{"root":{"HeaderInfor":{"serviceName":"getHospitalName"}}',
+        msgBody: ""
+      };
+      const res = await this.$http.post(
+        "/getDictionaryData/GetData.asmx/callInterface",
+        queryDeptParams
+      );
+
+      var tmpDeptList = this.uniq(res.data, "HospitalName");
+      tmpDeptList.forEach((item, index) => {
+        var map = {
+          code: item,
+          value: item
+        };
+        this.deptOptions.push(map);
+      });
+    },
+    uniq(array, key) {
+      var temp = [];
+      for (var i = 0; i < array.length; i++) {
+        if (temp.indexOf(array[i][key]) == -1) {
+          temp.push(array[i][key]);
+        }
+      }
+      return temp;
+    },
 			async selectAppointmentDate() {
 				if(this.appointmentForm.studyHospital != undefined && this.appointmentForm.studyHospital != '' 
 				&& this.appointmentForm.studyType != undefined && this.appointmentForm.studyType != ''){
@@ -470,7 +559,7 @@
 							FeeStatus: this.selectDataItem.FeeStatus,
 							AppHospital: this.appointmentForm.studyHospital,
 							ExcuteHospital: this.appointmentForm.studyHospital,
-							AppTime: this.dateFormatToString(this.selectDataItem.AppTime),
+							AppTime: this.dateFormatToString(new Date()),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
 						}
 					}
@@ -478,13 +567,13 @@
 
 				var appSendParams = {
           // msgHeader : this.isEditOrNew == 'new' ? '{"root":{"serviceName":"sendAppInfor"}' : '{"root":{"serviceName":"UpdateAppInfor"}',
-					msgHeader : this.isEditOrNew == 'new' ? '{"root":{"HeaderInfor":{"serviceName":"sendAppInfor_H"}}' : '{"root":{"HeaderInfor":{"serviceName":"UpdateAppInfor_H"}}',
+					msgHeader : this.isEditOrNew == 'new' ? '{"root":{"HeaderInfor":{"serviceName":"sendAppInfor_H"}}' : '{"root":{"HeaderInfor":{"serviceName":"updateAppInfor_H"}}',
 					msgBody : JSON.stringify(msgBody)
         }
-        const res = await this.$http.post('/GetHisInforInterface/registerInforInterface.asmx/callInterface', appSendParams);
+				const res = await this.$http.post('/HospitalC/sendToHospital.asmx/callInterface', appSendParams);
 				if(res.data.message == '0'){
 					// 如果成功
-					doAppointment();
+					this.doAppointment();
 				}else if(res.data.message == '1'){
 					//
 					this.$message({
@@ -498,7 +587,6 @@
 			},
 			async doAppointment(){
 				var user = JSON.parse(sessionStorage.getItem('user'));
-
 				var msgBody = {
 					root: {
 						patientInfor: {
@@ -531,7 +619,7 @@
 							FeeStatus: this.selectDataItem.FeeStatus,
 							AppHospital: this.appointmentForm.studyHospital,
 							ExcuteHospital: this.appointmentForm.studyHospital,
-							AppTime: this.dateFormatToString(this.selectDataItem.AppTime),
+							AppTime: this.dateFormatToString(new Date()),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
 						}
 					}
@@ -543,18 +631,26 @@
 					msgBody : JSON.stringify(msgBody)
         }
         const res = await this.$http.post('/AppInterface/AppService.asmx/callInterface', appSendParams);
-				debugger;
-				if(res.data.message == '0' || res.data.message == '1'){
+				if(res.data.message == '1'){
           this.$message({
             message: res.data.errorInfor,
-            type: res.data.message == '0'? 'success' : 'warning'
-          });
-
-          this.search();
-        }
+            type:  'warning'
+					});
+				}
+				if(res.data.message == '0'){
+					this.successDialogVisible=true;
+					this.search();
+				}
 			},
 			formatAppStatus(row, column){
-      	return row.AppStatus == '1' ? "已预约" : row.authority == '0' ? "未预约" : "其他";
+				if (row.AppStatus == '1'){
+					return '已预约';
+				}else if(row.AppStatus == '0'){
+					return '未预约';
+				}else if(row.AppStatus == '2'){
+          return '已取消';
+				}
+      	// return row.AppStatus == '1' ? "已预约" : row.AppStatus == '0' ? "未预约" : "其他";
 			},
 			appointmentyStatusTag(value, row){
 				row.appointmentyStatus = value;
@@ -575,14 +671,20 @@
         var msgBody = {
           root: {
             cancleInfo: {
-							// patientId: '23265',
-              patientId: this.form.PatientID,
-              visitNo: '',
-              patientType: this.form.PatientType,
-              examType: row.StudyType,
-							applyNo: row.OrderId,
-							// applyNo: '12313',
-              cancleDatetime: new Date(),
+
+              // patientId: this.form.PatientID,
+              // visitNo: '',
+              // patientType: this.form.PatientType,
+              // examType: row.StudyType,
+							// applyNo: row.OrderId,
+							// // applyNo: '12313',
+              // cancleDatetime: new Date(),
+              // cancleDoctorID: user.id,
+							// cancleDoctorName: user.name
+							patientName: this.form.PatientName,
+              AppHospital: user.OrgCode,
+              StudyType: row.StudyType,
+              cancleDatetime: this.dateFormatToString(new Date()),
               cancleDoctorID: user.id,
               cancleDoctorName: user.name
             }
@@ -593,10 +695,10 @@
 					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"cancleAppInfor_H"}}',
           msgBody : JSON.stringify(msgBody)
         }
-				const res = await this.$http.post('/GetHisInforInterface/registerInforInterface.asmx/callInterface',appCancelParams);
+				const res = await this.$http.post('/HospitalC/sendToHospital.asmx/callInterface',appCancelParams);
 				if(res.data.message == '0'){
 					// 如果成功
-					cancelAppointment();
+					this.cancelAppointment();
 				}else if(res.data.message == '1'){
 					//if fail
 					this.$message({
@@ -613,14 +715,20 @@
         var msgBody = {
           root: {
             cancleInfo: {
-							// patientId: '23265',
-              patientId: this.form.PatientID,
-              visitNo: '',
-              patientType: this.form.PatientType,
-              examType: row.StudyType,
-							applyNo: row.OrderId,
-							// applyNo: '12313',
-              cancleDatetime: new Date(),
+							// // patientId: '23265',
+              // patientId: this.form.PatientID,
+              // visitNo: '',
+              // patientType: this.form.PatientType,
+              // examType: row.StudyType,
+							// applyNo: row.OrderId,
+							// // applyNo: '12313',
+              // cancleDatetime: new Date(),
+              // cancleDoctorID: user.id,
+							// cancleDoctorName: user.name
+							patientName: this.form.PatientName,
+              AppHospital: user.OrgCode,
+              StudyType: row.StudyType,
+              cancleDatetime: this.dateFormatToString(new Date()),
               cancleDoctorID: user.id,
               cancleDoctorName: user.name
             }

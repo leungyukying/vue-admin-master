@@ -157,8 +157,14 @@
 					]
         }
 			}
-    },
+		},
+		created() {
+			this.search()
+		},
     methods: {
+			search(){
+				alert(123);
+			},
       handleClick(row){
         this.editDeptDialogTitle = '修改机构';
         this.editDeptDialogVisible = true;
@@ -179,7 +185,45 @@
             message: '已取消隐藏'
           });          
         });
-      }
+			},
+      async addHospital(){
+				var msgBody = {
+					root: {
+						HospitalInfor: {
+							HospitalName: this.dateFormatToString(this.searchForm.appointmentDate[0]),
+							HospitalCode: this.dateFormatToString(this.searchForm.appointmentDate[1]),
+							AppHospital: this.searchForm.appointmentStatus,
+							StudyType: this.searchForm.patientName,
+							Deleted: this.searchForm.phoneNum,
+							DisplayOrder: this.searchForm.outPatientNo,
+							PhoneNumber: this.searchForm.applyHospital,
+							Address: this.searchForm.doctorName,
+							Others: this.searchForm.checkHospital,
+						},
+					}
+				}
+
+				var patientParams = {
+					msgHeader : '{"root":{"HeaderInfor":{"serviceName":"sysncHospital"}}',
+					msgBody : JSON.stringify(msgBody)
+				}
+				const res = await this.$http.post("/sysncDataInterface/sysncDictionary.asmx/callInterface", patientParams);
+				if(res.data.message == '1'){
+        this.$message({
+            message: res.data.errorInfor,
+            type: 'warning'
+          });
+
+          return;
+      }else if(res.data.message == '0'){
+				editDeptDialogVisible = false;
+
+			}
+				// if(res.data.length > 0){
+				// 	this.form = res.data[0];
+				// }
+      },
+
     }
 	}
 
