@@ -145,6 +145,7 @@ export default {
       );
 
       var tmpDeptList = this.uniq(res.data, "HospitalName");
+
       tmpDeptList.forEach((item, index) => {
         var map = {
           code: item,
@@ -152,6 +153,7 @@ export default {
         };
         this.deptOptions.push(map);
       });
+      sessionStorage.deptOptions = JSON.stringify(this.deptOptions);
     },
     uniq(array, key) {
       var temp = [];

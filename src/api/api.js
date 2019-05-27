@@ -30,13 +30,18 @@ export const getList = (tableName, searchWord) => {
       "@encoding": "utf-8"
     },
     root: {
-      TableName: tableName,
-      userInfor: {
-        conditionValue: searchWord
-      }
+      TableName: tableName
     }
   };
-  searchWord && delete msgBody.root.TableName;
+  console.log(searchWord, "searchWordsearchWordsearchWord");
+  if (!searchWord) {
+  } else {
+    delete msgBody.root.TableName;
+    msgBody.root.userInfor = {
+      conditionValue: searchWord
+    };
+  }
+
   var patientParams = {
     msgHeader: JSON.stringify(msgHeader),
     msgBody: JSON.stringify(msgBody)

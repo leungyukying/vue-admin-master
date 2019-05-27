@@ -128,7 +128,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          addUser({ ...row, deleted: "1" }, "updateStudyType").then(res => {
+          addUser({ ...row, Deleted: "1" }, "updateStudyType").then(res => {
             this.getData();
             this.$message({
               type: "success",
