@@ -561,7 +561,8 @@
 							// AppHospital: this.appointmentForm.studyHospital,
 							AppHospital: user.OrgCode,
 							ExcuteHospital: this.appointmentForm.studyHospital,
-							AppTime: this.dateFormatToString(new Date()),
+							// AppTime: this.dateFormatToString(new Date()),
+							AppTime: this.dateFormatToString(this.appointmentForm.appDate),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
 						}
 					}
@@ -622,7 +623,8 @@
 							// AppHospital: this.appointmentForm.studyHospital,
 							AppHospital: user.OrgCode,
 							ExcuteHospital: this.appointmentForm.studyHospital,
-							AppTime: this.dateFormatToString(new Date()),
+							// AppTime: this.dateFormatToString(new Date()),
+							AppTime: this.dateFormatToString(this.appointmentForm.appDate),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
 						}
 					}
