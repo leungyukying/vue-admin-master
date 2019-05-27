@@ -42,8 +42,8 @@
         </el-form>
         <div class="tool-con">
           <el-button type="primary" size="small" @click="save">保存</el-button>
-          <el-button type="danger" size="small">删除</el-button>
-          <el-button size="small">重置</el-button>
+          <!-- <el-button type="danger" size="small">删除</el-button> -->
+          <el-button size="small" @click="reset">重置</el-button>
         </div>
       </div>
     </div>
@@ -92,6 +92,16 @@ export default {
 
         Object.assign(this.model, this.selectHispital);
       });
+    },
+    reset() {
+      this.model = {
+        InterfaceType: "",
+        GetOrderAddress: "",
+        GetBodyPartAddress: "",
+        PostAppAddress: "",
+        LookUpFeeAddress: "",
+        OtherInfo: ""
+      };
     }
   },
   created() {
