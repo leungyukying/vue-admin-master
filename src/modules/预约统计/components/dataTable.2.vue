@@ -3,7 +3,7 @@
     <el-table-column prop="病人姓名" label="病人姓名"></el-table-column>
     <el-table-column prop="年龄" label="年龄" width="70"></el-table-column>
     <el-table-column prop="性别" label="性别" width="70"></el-table-column>
-    <el-table-column prop="病人HIS号" label="HIS号" width="70"></el-table-column>
+    <el-table-column prop="HIS号" label="HIS号" width="70"></el-table-column>
     <el-table-column prop="病人来源" label="病人来源"></el-table-column>
     <el-table-column prop="检查医院" label="检查医院"></el-table-column>
     <el-table-column prop="检查类型" label="检查类型"></el-table-column>
@@ -18,27 +18,11 @@
 
 <script>
 export default {
+  props: {
+    tableData: Array
+  },
   data() {
-    return {
-      tableData: [
-        {
-          检查医院: "监网测试医院",
-          预约检查人数: 1,
-          完成检查人数: 0,
-          预约检查量: 1,
-          完成检查量: 0,
-          完成检查量总费用: 356
-        },
-        {
-          检查医院: "监网测试医院",
-          预约检查人数: 1,
-          完成检查人数: 0,
-          预约检查量: 1,
-          完成检查量: 0,
-          完成检查量总费用: 356
-        }
-      ]
-    };
+    return {};
   }
 };
 </script>

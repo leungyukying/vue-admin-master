@@ -5,6 +5,7 @@
     </div>
     <div class="main-con">
       <div class="search-con shadow">
+        {{formInline.value}}
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="预约时间">
             <el-date-picker

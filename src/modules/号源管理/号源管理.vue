@@ -25,6 +25,9 @@
             @click="getData"
           >查询</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button style="margin-left: 20px" icon="plus" type="primary" @click="openModal">添加号源</el-button>
+        </el-form-item>
       </el-form>
     </div>
     <el-table :data="tableData" border style="width: 100%">
@@ -41,17 +44,13 @@
     </el-table>
 
     <!--弹出手工预约页面-->
-    <el-dialog
-      id="editDeptDialog"
-      :title="modalData.NumberIdentity ? '编辑用户' : '新增用户'"
-      :visible.sync="editDeptDialogVisible"
-    >
-      <el-form :model="modalData" label-width="120px">
+    <el-dialog id="editDeptDialog" :title="'添加号源'" :visible.sync="editDeptDialogVisible">
+      <el-form label-width="120px" v-model="modalData">
         <el-form-item label="开始时间" prop="BegTime">
-          <el-input v-model="modalData.BegTime" type="time"></el-input>
+          <el-time-picker v-model="modalData.BegTime" placeholder="开始时间"></el-time-picker>
         </el-form-item>
         <el-form-item label="结束时间" prop="EndTime">
-          <el-input v-model="modalData.EndTime" type="time"></el-input>
+          <el-time-picker v-model="modalData.EndTime" placeholder="结束时间"></el-time-picker>
         </el-form-item>
         <el-form-item label="总号源" prop="address">
           <el-input v-model="modalData.TotalNumber"></el-input>
@@ -90,37 +89,31 @@ export default {
         EndTime: "",
         TotalNumber: "",
         NumberComment: "",
+        AppedNumber: "0",
+        RemainNumber: "0",
         Deleted: "0"
       }
     };
   },
   methods: {
-    openModal(modal) {
+    openModal() {
       this.modalData = {
         BegTime: "",
         EndTime: "",
         TotalNumber: "",
         NumberComment: "",
+        AppedNumber: "0",
+        RemainNumber: "0",
         Deleted: "0"
       };
-      if (modal) {
-        this.modalData = modal;
-      } else {
-      }
+
       this.editDeptDialogVisible = true;
     },
     post() {
-      if (this.modalData.NumberIdentity) {
-        addUser(this.modalData, "updateNumber").then(res => {
-          this.editDeptDialogVisible = false;
-          this.getData();
-        });
-      } else {
-        addUser(this.modalData, "addNumber").then(res => {
-          this.editDeptDialogVisible = false;
-          this.getData();
-        });
-      }
+      addUser(this.modalData, "addNumber").then(res => {
+        this.editDeptDialogVisible = false;
+        this.getData();
+      });
     },
     handleClick(row) {
       this.editDeptDialogTitle = "新增/编辑";
