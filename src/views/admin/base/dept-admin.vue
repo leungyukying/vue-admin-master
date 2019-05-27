@@ -163,7 +163,6 @@
 		},
     methods: {
 			search(){
-				alert(123);
 			},
       handleClick(row){
         this.editDeptDialogTitle = '修改机构';

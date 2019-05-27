@@ -647,9 +647,10 @@
 					return '已预约';
 				}else if(row.AppStatus == '0'){
 					return '未预约';
-				}else if(row.AppStatus == '2'){
-          return '已取消';
 				}
+				// else if(row.AppStatus == '2'){
+        //   return '已取消';
+				// }
       	// return row.AppStatus == '1' ? "已预约" : row.AppStatus == '0' ? "未预约" : "其他";
 			},
 			appointmentyStatusTag(value, row){
