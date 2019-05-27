@@ -5,7 +5,7 @@
 				<el-form ref="form" label-position="right" label-width="75px" :model="form" @submit.prevent="onSubmit" style="margin:20px;width:95%;min-width:600px;">
 					<el-row :gutter="10">
 						<el-col :span="12">
-							<el-form-item label="HIS号" prop="HisCode">
+							<el-form-item label="*HIS号" prop="HisCode">
 								<el-input v-model="form.HisCode">
 									<el-select v-model="form.PatientType" slot="prepend">
 										<el-option label="门诊" value="1"></el-option>
@@ -229,7 +229,8 @@
 			:visible.sync="successDialogVisible">
 			<div class="el-icon-date successMsg" type="text">  恭喜你预约成功</div>
 			<hr style="width: 290px">
-			<div type="text" style="font-size:15px; display:block; text-align: center; color: #909399;">预约检查时间：2019-04-21 10:00-10:30</div>
+			<!-- <div type="text" style="font-size:15px; display:block; text-align: center; color: #909399;">预约检查时间：2019-04-21 10:00-10:30</div> -->
+			<div type="text" style="font-size:15px; display:block; text-align: center; color: #909399;">预约检查时间：{{dateToString(appointmentForm.appDate)}}</div>
 			<div slot="footer" class="dialog-footer" style="text-align:center">
 				<el-button type="primary" @click="successDialogVisible = false; dialogFormVisible=false">关闭并打印</el-button>
 			</div>
@@ -557,7 +558,8 @@
 							AppStatus: this.selectDataItem.AppStatus,
 							ItemFee: this.selectDataItem.ItemFee,
 							FeeStatus: this.selectDataItem.FeeStatus,
-							AppHospital: this.appointmentForm.studyHospital,
+							// AppHospital: this.appointmentForm.studyHospital,
+							AppHospital: user.OrgCode,
 							ExcuteHospital: this.appointmentForm.studyHospital,
 							AppTime: this.dateFormatToString(new Date()),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
@@ -617,7 +619,8 @@
 							AppStatus: this.selectDataItem.AppStatus,
 							ItemFee: this.selectDataItem.ItemFee,
 							FeeStatus: this.selectDataItem.FeeStatus,
-							AppHospital: this.appointmentForm.studyHospital,
+							// AppHospital: this.appointmentForm.studyHospital,
+							AppHospital: user.OrgCode,
 							ExcuteHospital: this.appointmentForm.studyHospital,
 							AppTime: this.dateFormatToString(new Date()),
 							AppTimeSeg: this.dateToString(this.appointmentForm.appDate) + ' ' + this.checkList[0]
@@ -682,7 +685,8 @@
               // cancleDatetime: new Date(),
               // cancleDoctorID: user.id,
 							// cancleDoctorName: user.name
-							patientName: this.form.PatientName,
+						  HisCode: this.form.HisCode,
+						  patientName: this.form.PatientName,
               AppHospital: user.OrgCode,
               StudyType: row.StudyType,
               cancleDatetime: this.dateFormatToString(new Date()),
@@ -726,6 +730,7 @@
               // cancleDatetime: new Date(),
               // cancleDoctorID: user.id,
 							// cancleDoctorName: user.name
+							HisCode: this.form.HisCode,
 							patientName: this.form.PatientName,
               AppHospital: user.OrgCode,
               StudyType: row.StudyType,
