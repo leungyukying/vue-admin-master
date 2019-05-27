@@ -38,6 +38,12 @@ export const getList = (tableName, name, type, date) => {
       }
     }
   };
+
+  if (msgBody.root.NumberInfor.AppDate) {
+    msgBody.root.NumberInfor.AppDate = moment(
+      msgBody.root.NumberInfor.AppDate
+    ).format("YYYY-MM-DD");
+  }
   (name || type || date) && delete msgBody.root.TableName;
   var patientParams = {
     msgHeader: JSON.stringify(msgHeader),
@@ -96,11 +102,17 @@ export const addUser = (modalData, event) => {
 
   Object.assign(msgBody.root.NumberInfor, modalData);
   msgBody.root.NumberInfor.BegTime = moment(
-    msgBody.root.NumberInfor.BegTime
+    "2019-05-27 " + msgBody.root.NumberInfor.BegTime
   ).format("HH:mm:ss");
   msgBody.root.NumberInfor.EndTime = moment(
-    msgBody.root.NumberInfor.EndTime
+    "2019-05-27 " + msgBody.root.NumberInfor.EndTime
   ).format("HH:mm:ss");
+  if (msgBody.root.NumberInfor.AppDate) {
+    msgBody.root.NumberInfor.AppDate = moment(
+      msgBody.root.NumberInfor.AppDate
+    ).format("YYYY-MM-DD");
+  }
+
   delete msgBody.root.NumberInfor.NumberIdentity;
 
   var patientParams = {

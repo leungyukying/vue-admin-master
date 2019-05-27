@@ -37,7 +37,7 @@
       <el-table-column prop="NumberComment" label="备注" min-width="100px"></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button @click="openModal(scope.row)" size="small">编辑</el-button>
+          <!-- <el-button @click="openModal(scope.row)" size="small">编辑</el-button> -->
           <el-button type="danger" size="small" @click="hiddenDept(scope.row)">隐藏</el-button>
         </template>
       </el-table-column>
@@ -96,7 +96,7 @@ export default {
     };
   },
   methods: {
-    openModal() {
+    openModal(modal) {
       this.modalData = {
         BegTime: "",
         EndTime: "",
@@ -106,7 +106,23 @@ export default {
         RemainNumber: "0",
         Deleted: "0"
       };
-
+      if (modal) {
+        console.log(modal);
+        this.modalData = JSON.parse(JSON.stringify(modal));
+        if (
+          this.modalData.BegTime &&
+          this.modalData.BegTime.indexOf("2019") == -1
+        ) {
+          this.modalData.BegTime = "2019-05-27 " + this.modalData.BegTime;
+        }
+        if (
+          this.modalData.EndTime &&
+          this.modalData.EndTime.indexOf("2019") == -1
+        ) {
+          this.modalData.EndTime = "2019-05-27 " + this.modalData.EndTime;
+        }
+      } else {
+      }
       this.editDeptDialogVisible = true;
     },
     post() {
