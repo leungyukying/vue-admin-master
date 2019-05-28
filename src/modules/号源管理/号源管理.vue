@@ -26,7 +26,12 @@
           >查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button style="margin-left: 20px" icon="plus" type="primary" @click="openModal">添加号源</el-button>
+          <el-button
+            style="margin-left: 20px"
+            icon="plus"
+            type="primary"
+            @click="openModal(null)"
+          >添加号源</el-button>
         </el-form-item>
       </el-form>
     </div>
